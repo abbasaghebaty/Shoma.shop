@@ -1,44 +1,487 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shoma Shop</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            text-align: center;
-            padding-top: 100px;
-        }
+<title>شما | فروشگاه مواد شوینده و بهداشتی</title>
 
-        h1 {
-            color: #222;
-            font-size: 50px;
-        }
+<style>
 
-        p {
-            font-size: 22px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:tahoma, sans-serif;
+}
 
-        .box {
-            background: white;
-            width: 400px;
-            margin: auto;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px #ddd;
-        }
-    </style>
+body{
+    background:#f7f8fa;
+    color:#333;
+}
+
+
+/* Header */
+
+header{
+    background:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 8%;
+    box-shadow:0 3px 15px #0001;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:bold;
+    color:#16a085;
+}
+
+nav a{
+    margin:0 15px;
+    text-decoration:none;
+    color:#333;
+    font-size:16px;
+}
+
+nav a:hover{
+    color:#16a085;
+}
+
+
+/* Hero */
+
+.hero{
+
+    height:450px;
+    margin:30px 8%;
+    border-radius:25px;
+    background:
+    linear-gradient(90deg,#16a085dd,#1abc9ccc),
+    url("https://images.unsplash.com/photo-1583947215259-38e31be8751f");
+
+    background-size:cover;
+    display:flex;
+    align-items:center;
+    padding:50px;
+    color:white;
+}
+
+
+.hero h1{
+    font-size:45px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:20px;
+    margin-bottom:30px;
+}
+
+
+.btn{
+    background:white;
+    color:#16a085;
+    padding:15px 35px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+
+/* Categories */
+
+section{
+    padding:40px 8%;
+}
+
+.title{
+    text-align:center;
+    font-size:32px;
+    margin-bottom:30px;
+}
+
+
+.categories{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
+
+}
+
+
+.category{
+
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 5px 20px #0001;
+transition:.3s;
+
+}
+
+.category:hover{
+transform:translateY(-8px);
+}
+
+
+.category span{
+
+font-size:45px;
+
+}
+
+
+
+/* Products */
+
+
+.products{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+
+}
+
+
+
+.product{
+
+background:white;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 5px 20px #0001;
+
+}
+
+
+.product img{
+
+width:100%;
+height:200px;
+object-fit:cover;
+
+}
+
+
+.product div{
+
+padding:20px;
+
+}
+
+
+.price{
+
+color:#16a085;
+font-size:20px;
+font-weight:bold;
+
+}
+
+
+
+.buy{
+
+display:block;
+background:#16a085;
+color:white;
+text-align:center;
+padding:12px;
+border-radius:10px;
+margin-top:15px;
+text-decoration:none;
+
+}
+
+
+
+/* Features */
+
+.features{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+
+}
+
+
+.feature{
+
+background:white;
+padding:25px;
+text-align:center;
+border-radius:20px;
+
+}
+
+
+/* Footer */
+
+
+footer{
+
+background:#222;
+color:white;
+padding:30px;
+text-align:center;
+
+}
+
+
+</style>
+
 </head>
+
 
 <body>
 
-<div class="box">
-    <h1>شما شاپ</h1>
-    <p>سایت با موفقیت آنلاین شد 🚀</p>
+
+<header>
+
+<div class="logo">
+شما
 </div>
+
+
+<nav>
+
+<a href="#">خانه</a>
+<a href="#">محصولات</a>
+<a href="#">درباره ما</a>
+<a href="#">تماس</a>
+
+</nav>
+
+
+</header>
+
+
+
+
+<div class="hero">
+
+
+<div>
+
+<h1>
+خرید آسان مواد شوینده و بهداشتی
+</h1>
+
+
+<p>
+کیفیت بالا، قیمت مناسب، ارسال سریع
+</p>
+
+
+<a class="btn" href="#">
+مشاهده محصولات
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<section>
+
+<h2 class="title">
+دسته‌بندی محصولات
+</h2>
+
+
+<div class="categories">
+
+
+<div class="category">
+<span>🧴</span>
+<h3>شوینده‌ها</h3>
+</div>
+
+
+<div class="category">
+<span>🧼</span>
+<h3>بهداشتی</h3>
+</div>
+
+
+<div class="category">
+<span>🧽</span>
+<h3>نظافت خانه</h3>
+</div>
+
+
+<div class="category">
+<span>🧺</span>
+<h3>لباسشویی</h3>
+</div>
+
+
+</div>
+
+</section>
+
+
+
+
+
+
+<section>
+
+
+<h2 class="title">
+محصولات ویژه
+</h2>
+
+
+<div class="products">
+
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1607006344380-b6775a0824d7">
+
+<div>
+
+<h3>
+مایع ظرفشویی
+</h3>
+
+<p class="price">
+۸۵,۰۰۰ تومان
+</p>
+
+<a class="buy" href="#">
+خرید
+</a>
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae">
+
+<div>
+
+<h3>
+شامپو
+</h3>
+
+<p class="price">
+۱۲۰,۰۰۰ تومان
+</p>
+
+<a class="buy" href="#">
+خرید
+</a>
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1556228720-195a672e8a03">
+
+<div>
+
+<h3>
+مواد بهداشتی
+</h3>
+
+<p class="price">
+۹۰,۰۰۰ تومان
+</p>
+
+<a class="buy" href="#">
+خرید
+</a>
+
+</div>
+
+</div>
+
+
+
+</div>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+
+<h2 class="title">
+چرا شما؟
+</h2>
+
+
+<div class="features">
+
+
+<div class="feature">
+🚚
+<h3>ارسال سریع</h3>
+<p>تحویل سریع سفارش‌ها</p>
+</div>
+
+
+<div class="feature">
+⭐
+<h3>کیفیت تضمینی</h3>
+<p>محصولات اصل و معتبر</p>
+</div>
+
+
+<div class="feature">
+💳
+<h3>پرداخت آسان</h3>
+<p>روش‌های پرداخت متنوع</p>
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<footer>
+
+© 2026 فروشگاه شما - تمامی حقوق محفوظ است
+
+</footer>
+
 
 </body>
 </html>
