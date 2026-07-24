@@ -4,1246 +4,917 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>شما شاپ | شوینده بهداشتی شما</title>
-
-    <!-- فونت وزیر از CDN -->
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <!-- آیکون‌های Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <meta name="description" content="شما شاپ | شوینده بهداشتی شما - در حال بازسازی سایت">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0a0a0f;
+            --card-bg: rgba(20, 22, 30, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #2dd4bf;
+            --primary-glow: rgba(45, 212, 191, 0.4);
+            --accent: #f59e0b;
+            --accent-glow: rgba(245, 158, 11, 0.4);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.5);
+            --success: #22c55e;
+            --success-glow: rgba(34, 197, 94, 0.5);
+            --warning: #f59e0b;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #00a8b5;
-            --primary-dark: #008b96;
-            --secondary: #f0fdfd;
-            --accent: #ff6b6b;
-            --text: #2d3436;
-            --text-light: #636e72;
-            --white: #ffffff;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
-            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.12), 0 10px 20px rgba(0, 0, 0, 0.06);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: var(--gray-50);
+            font-family: 'Vazirmatn', system-ui, sans-serif;
+            background: var(--bg);
             color: var(--text);
-            line-height: 1.7;
+            min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.7;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: default;
         }
 
-        /* ==================== انیمیشن‌های کلی ==================== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* ============ CANVAS BACKGROUND ============ */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.92);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+
+        /* ============ MAIN CONTAINER ============ */
+        .main-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 24px 18px 50px;
         }
-        @keyframes floatBubble {
+
+        /* ============ HERO / HEADER ============ */
+        .hero-section {
+            text-align: center;
+            padding: 40px 10px 20px;
+            position: relative;
+        }
+
+        .brand-name {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #2dd4bf 0%, #60a5fa 40%, #a78bfa 70%, #2dd4bf 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 5s ease-in-out infinite;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .brand-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        @keyframes gradientShift {
             0%,
             100% {
-                transform: translateY(0) rotate(0deg);
+                background-position: 0% 50%;
             }
             25% {
-                transform: translateY(-18px) rotate(3deg);
+                background-position: 100% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
             }
             75% {
-                transform: translateY(10px) rotate(-2deg);
+                background-position: 0% 100%;
             }
         }
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
+
+        /* ============ STATUS BADGE ============ */
+        .status-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0 10px;
         }
-        @keyframes pulse {
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 22px;
+            border-radius: 50px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+        }
+
+        .status-badge.open::before {
+            background: radial-gradient(ellipse at center, var(--success-glow) 0%, transparent 70%);
+            opacity: 0.25;
+        }
+        .status-badge.closed::before {
+            background: radial-gradient(ellipse at center, var(--danger-glow) 0%, transparent 70%);
+            opacity: 0.2;
+        }
+        .status-badge.soon::before {
+            background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.5) 0%, transparent 70%);
+            opacity: 0.25;
+        }
+
+        .status-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .status-dot.open-dot {
+            background: var(--success);
+            box-shadow: 0 0 14px var(--success-glow);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        .status-dot.closed-dot {
+            background: var(--danger);
+            box-shadow: 0 0 14px var(--danger-glow);
+        }
+        .status-dot.soon-dot {
+            background: var(--warning);
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.6);
+            animation: pulseDot 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
             0%,
             100% {
+                box-shadow: 0 0 8px currentColor;
                 transform: scale(1);
             }
             50% {
-                transform: scale(1.04);
+                box-shadow: 0 0 24px currentColor;
+                transform: scale(1.4);
             }
         }
 
-        .animate-in {
-            animation: fadeInUp 0.7s ease forwards;
-        }
-        .animate-in-delay-1 {
-            animation-delay: 0.1s;
-            opacity: 0;
-        }
-        .animate-in-delay-2 {
-            animation-delay: 0.25s;
-            opacity: 0;
-        }
-        .animate-in-delay-3 {
-            animation-delay: 0.4s;
-            opacity: 0;
-        }
-        .animate-in-delay-4 {
-            animation-delay: 0.55s;
-            opacity: 0;
-        }
-        .animate-in-delay-5 {
-            animation-delay: 0.7s;
-            opacity: 0;
+        .status-text {
+            font-weight: 600;
         }
 
-        /* ==================== هدر ==================== */
-        .header {
-            background: var(--white);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-        }
-        .header.scrolled {
-            box-shadow: var(--shadow-lg);
+        /* ============ MAIN CARD ============ */
+        .main-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            margin-bottom: 20px;
+            transition: box-shadow 0.5s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .header-top {
-            background: linear-gradient(135deg, #e0f7f9 0%, #f0fdfd 100%);
-            padding: 8px 0;
-            font-size: 0.8rem;
-            color: var(--primary-dark);
+        .main-card:hover {
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 80px rgba(45, 212, 191, 0.04);
+        }
+
+        .rebuild-message {
             text-align: center;
-            letter-spacing: 0.3px;
+            margin-bottom: 28px;
         }
-        .header-top i {
-            margin: 0 5px;
-            animation: floatBubble 3s ease-in-out infinite;
-        }
-
-        .header-main {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 12px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.7rem;
-            font-weight: 900;
-            color: var(--primary);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        .logo:hover {
-            transform: scale(1.03);
-        }
-        .logo i {
-            font-size: 2rem;
-            color: var(--accent);
-            animation: floatBubble 4s ease-in-out infinite;
-        }
-
-        .search-box {
-            flex: 1;
-            max-width: 500px;
-            position: relative;
-            min-width: 220px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 13px 50px 13px 20px;
-            border: 2px solid var(--gray-200);
-            border-radius: 50px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 0.9rem;
-            transition: var(--transition);
-            background: var(--gray-50);
-            outline: none;
-        }
-        .search-box input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(0, 168, 181, 0.08);
-            background: var(--white);
-        }
-        .search-box button {
-            position: absolute;
-            left: 6px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 1rem;
-        }
-        .search-box button:hover {
-            background: var(--primary-dark);
-            transform: translateY(-50%) scale(1.08);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-        .header-actions a {
-            color: var(--text);
-            text-decoration: none;
-            position: relative;
-            font-size: 1.3rem;
-            transition: var(--transition);
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: var(--gray-100);
-        }
-        .header-actions a:hover {
-            background: var(--primary);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-        .cart-count {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--accent);
-            color: var(--white);
-            font-size: 0.65rem;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            animation: pulse 2s infinite;
-        }
-
-        /* ==================== منوی ناوبری ==================== */
-        .nav {
-            background: var(--white);
-            border-top: 1px solid var(--gray-100);
-            border-bottom: 1px solid var(--gray-100);
-        }
-        .nav-inner {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 25px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        .nav-inner::-webkit-scrollbar {
-            display: none;
-        }
-        .nav a {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 14px 20px;
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            border-bottom: 3px solid transparent;
-            transition: var(--transition);
-            border-radius: 12px 12px 0 0;
-        }
-        .nav a:hover,
-        .nav a.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-            background: var(--secondary);
-        }
-        .nav a i {
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
-        /* ==================== بخش Hero ==================== */
-        .hero {
-            max-width: 1300px;
-            margin: 25px auto;
-            padding: 0 25px;
-        }
-        .hero-inner {
-            background: linear-gradient(135deg, #d4f5f7 0%, #e8fafb 30%, #f0fdfd 60%, #fff5f5 100%);
-            border-radius: var(--radius);
-            padding: 50px 45px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-            flex-wrap: wrap;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        .hero-inner::after {
-            content: '';
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(0, 168, 181, 0.1) 0%, transparent 70%);
-            top: -80px;
-            left: -80px;
-            border-radius: 50%;
-            animation: floatBubble 8s ease-in-out infinite;
-        }
-        .hero-inner::before {
-            content: '';
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, transparent 70%);
-            bottom: -40px;
-            right: -40px;
-            border-radius: 50%;
-            animation: floatBubble 6s ease-in-out infinite reverse;
-        }
-        .hero-text {
-            flex: 1;
-            min-width: 280px;
-            position: relative;
-            z-index: 1;
-        }
-        .hero-text .badge {
-            display: inline-block;
-            background: var(--accent);
-            color: var(--white);
-            padding: 7px 18px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            animation: pulse 2.5s infinite;
-        }
-        .hero-text h1 {
-            font-size: 2.6rem;
-            font-weight: 900;
-            color: var(--text);
-            line-height: 1.4;
-            margin-bottom: 14px;
-        }
-        .hero-text h1 span {
-            color: var(--primary);
-            position: relative;
-        }
-        .hero-text p {
-            color: var(--text-light);
-            font-size: 1rem;
-            margin-bottom: 24px;
-            max-width: 450px;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 30px;
-            border-radius: 50px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: var(--white);
-            box-shadow: 0 8px 25px rgba(0, 168, 181, 0.3);
-        }
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 14px 35px rgba(0, 168, 181, 0.4);
-        }
-        .btn-outline {
-            background: var(--white);
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-        .btn-outline:hover {
-            background: var(--primary);
-            color: var(--white);
-            transform: translateY(-3px);
-        }
-        .btn-sm {
-            padding: 9px 20px;
-            font-size: 0.8rem;
-        }
-        .hero-image {
-            flex: 0 0 320px;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .hero-image .circle {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 40% 40%, #ffffff 0%, #e0f7f9 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-lg);
-            animation: floatBubble 5s ease-in-out infinite;
-        }
-        .hero-image .circle i {
-            font-size: 7rem;
-            color: var(--primary);
-            opacity: 0.8;
-        }
-
-        /* ==================== بخش دسته‌بندی‌ها ==================== */
-        .section {
-            max-width: 1300px;
-            margin: 40px auto;
-            padding: 0 25px;
-        }
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .section-header h2 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .section-header h2 i {
-            color: var(--primary);
+        .rebuild-message h2 {
             font-size: 1.4rem;
-        }
-        .section-header a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-        .section-header a:hover {
-            color: var(--primary-dark);
-            transform: translateX(-4px);
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
-        }
-        .category-card {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 22px 16px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text);
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        .category-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
-        }
-        .category-card .icon-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 1.6rem;
-            color: var(--primary);
-            transition: var(--transition);
-        }
-        .category-card:hover .icon-circle {
-            background: var(--primary);
-            color: var(--white);
-            transform: rotate(-8deg) scale(1.1);
-        }
-        .category-card span {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        /* ==================== کارت محصول ==================== */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 22px;
-        }
-        .product-card {
-            background: var(--white);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            position: relative;
-            border: 2px solid transparent;
-        }
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
-        }
-        .product-card .img-wrap {
-            background: linear-gradient(180deg, #f0fdfd 0%, #ffffff 100%);
-            padding: 30px 20px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .product-card .img-wrap .product-icon {
-            font-size: 5rem;
-            color: var(--primary);
-            transition: var(--transition);
-            display: inline-block;
-        }
-        .product-card:hover .img-wrap .product-icon {
-            transform: scale(1.1) rotate(-5deg);
-        }
-        .product-card .discount-badge {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: var(--accent);
-            color: var(--white);
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.7rem;
             font-weight: 700;
-            z-index: 2;
+            color: #fff;
+            margin-bottom: 8px;
         }
-        .product-card .wishlist-btn {
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            background: var(--white);
-            border: none;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 0.95rem;
-            color: #ccc;
-            transition: var(--transition);
-            z-index: 2;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .rebuild-message p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
         }
-        .product-card .wishlist-btn:hover {
-            color: #e74c3c;
-            transform: scale(1.15);
-        }
-        .product-info {
-            padding: 16px 18px 20px;
-        }
-        .product-info .category-tag {
-            font-size: 0.7rem;
-            color: var(--primary);
+
+        /* ============ SECTION TITLES ============ */
+        .section-title {
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .product-info h3 {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin: 6px 0;
-            line-height: 1.5;
-        }
-        .product-info .rating {
-            color: #f4a825;
-            font-size: 0.75rem;
-            margin-bottom: 8px;
-        }
-        .product-info .rating span {
-            color: var(--text-light);
-            margin-right: 4px;
-        }
-        .product-info .price-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .product-info .price {
-            font-weight: 900;
-            font-size: 1.1rem;
-            color: var(--text);
-        }
-        .product-info .old-price {
-            font-size: 0.8rem;
-            color: #b2bec3;
-            text-decoration: line-through;
-        }
-        .product-info .add-to-cart {
-            width: 100%;
-            margin-top: 12px;
-            padding: 11px;
-            border-radius: 50px;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            font-family: 'Vazirmatn', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .product-info .add-to-cart:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 8px 20px rgba(0, 168, 181, 0.35);
-            transform: translateY(-2px);
-        }
-
-        /* ==================== بخش تخفیف ویژه ==================== */
-        .promo-banner {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-            border-radius: var(--radius);
-            padding: 35px 35px;
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-        .promo-banner::after {
-            content: '';
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 50%;
-            top: -50px;
-            left: -50px;
-        }
-        .promo-banner .promo-text h3 {
-            font-size: 1.6rem;
-            font-weight: 900;
-            position: relative;
-            z-index: 1;
-        }
-        .promo-banner .promo-text p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-            margin-top: 4px;
-        }
-        .promo-banner .btn-white {
-            background: var(--white);
-            color: #ee5a24;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-            padding: 13px 28px;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        .promo-banner .btn-white:hover {
-            transform: scale(1.06);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        /* ==================== بخش ویژگی‌ها ==================== */
-        .features-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 18px;
-        }
-        .feature-item {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 25px 20px;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-        }
-        .feature-item:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow);
-        }
-        .feature-item i {
-            font-size: 2.2rem;
+            letter-spacing: 2px;
             color: var(--primary);
-            margin-bottom: 10px;
-            display: block;
-            transition: var(--transition);
-        }
-        .feature-item:hover i {
-            transform: scale(1.15);
-            color: var(--primary-dark);
-        }
-        .feature-item h4 {
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-        .feature-item p {
-            font-size: 0.78rem;
-            color: var(--text-light);
-        }
-
-        /* ==================== فوتر ==================== */
-        .footer {
-            background: #1a1d23;
-            color: #cbd5e1;
-            padding: 50px 25px 20px;
-            margin-top: 50px;
-        }
-        .footer-inner {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 35px;
-        }
-        .footer-col h4 {
-            color: var(--white);
-            font-weight: 700;
-            margin-bottom: 16px;
-            font-size: 1rem;
+            margin: 24px 0 14px;
+            text-align: center;
             position: relative;
-            display: inline-block;
         }
-        .footer-col h4::after {
+        .section-title::after {
             content: '';
             display: block;
             width: 40px;
-            height: 3px;
+            height: 2px;
             background: var(--primary);
-            border-radius: 3px;
-            margin-top: 6px;
+            margin: 8px auto 0;
+            border-radius: 2px;
+            opacity: 0.5;
         }
-        .footer-col p,
-        .footer-col a {
-            font-size: 0.82rem;
-            color: #94a3b8;
+
+        /* ============ BUTTON GRID ============ */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 12px;
+            margin: 8px 0 6px;
+        }
+
+        /* ============ MAGIC BUTTON ============ */
+        .magic-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            font-family: 'Vazirmatn', system-ui, sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
             text-decoration: none;
-            display: block;
-            margin-bottom: 8px;
-            transition: var(--transition);
+            transition: all 0.25s ease;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            white-space: nowrap;
+            z-index: 1;
         }
-        .footer-col a:hover {
-            color: var(--white);
-            transform: translateX(-3px);
-        }
-        .footer-col .social-icons {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .footer-col .social-icons a {
-            width: 36px;
-            height: 36px;
+
+        .magic-btn::before {
+            content: '';
+            position: absolute;
+            top: var(--mouse-y, 50%);
+            left: var(--mouse-x, 50%);
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
             border-radius: 50%;
-            background: #2d313a;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 70%);
+            transition: width 0.5s ease, height 0.5s ease;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .magic-btn:hover::before {
+            width: 350px;
+            height: 350px;
+        }
+        .magic-btn:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35), 0 0 25px rgba(45, 212, 191, 0.08);
+            color: #fff;
+        }
+        .magic-btn:active {
+            transform: scale(0.96);
+            transition: transform 0.1s;
+        }
+
+        /* accent variants */
+        .magic-btn.telegram {
+            border-color: rgba(0, 136, 204, 0.35);
+            background: rgba(0, 136, 204, 0.08);
+        }
+        .magic-btn.telegram:hover {
+            border-color: rgba(0, 160, 230, 0.7);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(0, 160, 230, 0.2);
+        }
+        .magic-btn.instagram {
+            border-color: rgba(225, 48, 108, 0.35);
+            background: rgba(225, 48, 108, 0.08);
+        }
+        .magic-btn.instagram:hover {
+            border-color: rgba(255, 60, 130, 0.7);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(255, 60, 130, 0.2);
+        }
+        .magic-btn.eitaa {
+            border-color: rgba(255, 140, 0, 0.35);
+            background: rgba(255, 140, 0, 0.08);
+        }
+        .magic-btn.eitaa:hover {
+            border-color: rgba(255, 160, 30, 0.7);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(255, 140, 0, 0.2);
+        }
+        .magic-btn.rubika {
+            border-color: rgba(150, 50, 220, 0.35);
+            background: rgba(150, 50, 220, 0.08);
+        }
+        .magic-btn.rubika:hover {
+            border-color: rgba(170, 70, 240, 0.7);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(150, 50, 220, 0.2);
+        }
+        .magic-btn.phone {
+            border-color: rgba(34, 197, 94, 0.35);
+            background: rgba(34, 197, 94, 0.08);
+        }
+        .magic-btn.phone:hover {
+            border-color: rgba(50, 220, 110, 0.7);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(34, 197, 94, 0.2);
+        }
+        .magic-btn.map-btn {
+            border-color: rgba(59, 130, 246, 0.35);
+            background: rgba(59, 130, 246, 0.08);
+        }
+        .magic-btn.map-btn:hover {
+            border-color: rgba(80, 150, 255, 0.7);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .btn-label {
+            font-weight: 500;
+        }
+
+        /* ============ ADDRESS ROW ============ */
+        .address-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin: 6px 0;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            text-align: center;
+            padding: 0 4px;
+        }
+        .address-text {
+            flex: 1 1 200px;
+            min-width: 180px;
+            line-height: 1.8;
+        }
+
+        /* ============ HOURS TABLE ============ */
+        .hours-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-md);
+            padding: 20px 18px;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .hours-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .hours-block {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            min-width: 120px;
+        }
+        .hours-block span {
+            display: block;
+            font-weight: 600;
+            color: #fff;
+            font-size: 1rem;
+            margin-top: 2px;
+        }
+        .online-note {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #cbd5e1;
-            font-size: 1rem;
-            transition: var(--transition);
+            gap: 6px;
         }
-        .footer-col .social-icons a:hover {
+        .online-note .dot-indicator {
+            width: 7px;
+            height: 7px;
             background: var(--primary);
-            color: var(--white);
-            transform: translateY(-3px);
-        }
-        .footer-bottom {
-            max-width: 1300px;
-            margin: 30px auto 0;
-            padding-top: 20px;
-            border-top: 1px solid #2d313a;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #64748b;
+            border-radius: 50%;
+            animation: pulseDot 2.5s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
-        /* ==================== رسپانسیو ==================== */
-        @media (max-width: 768px) {
-            .hero-inner {
-                padding: 30px 20px;
-                text-align: center;
-                flex-direction: column-reverse;
+        /* ============ INFO BADGES ============ */
+        .info-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+        .info-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            padding: 7px 15px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .info-badge:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+        }
+
+        /* ============ FOOTER NOTE ============ */
+        .footer-note {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 28px;
+            padding: 0 10px;
+            line-height: 1.9;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 600px) {
+            .main-card {
+                padding: 22px 14px;
+                border-radius: var(--radius-md);
             }
-            .hero-text h1 {
-                font-size: 1.8rem;
+            .btn-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
-            .hero-image .circle {
-                width: 180px;
-                height: 180px;
+            .magic-btn {
+                padding: 11px 10px;
+                font-size: 0.78rem;
+                gap: 5px;
             }
-            .hero-image .circle i {
-                font-size: 4.5rem;
+            .brand-name {
+                font-size: 1.6rem;
             }
-            .header-main {
-                gap: 12px;
-            }
-            .search-box {
-                order: 3;
-                max-width: 100%;
-                flex: 1 1 100%;
-            }
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                gap: 14px;
-            }
-            .categories-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            .hours-row {
                 gap: 10px;
             }
-            .nav a {
-                padding: 10px 14px;
-                font-size: 0.78rem;
+            .hours-block {
+                min-width: 90px;
+                padding: 8px 10px;
+                font-size: 0.75rem;
+            }
+            .hours-block span {
+                font-size: 0.85rem;
             }
         }
-        @media (max-width: 480px) {
-            .products-grid {
+
+        @media (max-width: 380px) {
+            .btn-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 10px;
+                gap: 6px;
             }
-            .product-info {
-                padding: 10px 12px 14px;
-            }
-            .product-info h3 {
-                font-size: 0.8rem;
-            }
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.8rem;
+            .magic-btn {
+                padding: 10px 6px;
+                font-size: 0.7rem;
+                border-radius: 8px;
             }
         }
     </style>
 </head>
 <body>
+    <canvas id="particleCanvas"></canvas>
 
-    <!-- ==================== هدر ==================== -->
-    <header class="header" id="header">
-        <div class="header-top">
-            <i class="fas fa-truck"></i> ارسال رایگان برای سفارش‌های بالای ۵۰۰ هزار تومان
-            <i class="fas fa-gift"></i>
+    <div class="main-wrapper">
+        <!-- HERO -->
+        <div class="hero-section">
+            <h1 class="brand-name">شما شاپ</h1>
+            <p class="brand-subtitle">شوینده بهداشتی شما</p>
         </div>
-        <div class="header-main">
-            <a href="#" class="logo">
-                <i class="fas fa-soap"></i> شما شاپ
-            </a>
-            <div class="search-box">
-                <input type="text" placeholder="جستجوی محصولات...">
-                <button><i class="fas fa-search"></i></button>
+
+        <!-- STATUS -->
+        <div class="status-container">
+            <div class="status-badge" id="statusBadge">
+                <span class="status-dot" id="statusDot"></span>
+                <span class="status-text" id="statusText">در حال بررسی...</span>
             </div>
-            <div class="header-actions">
-                <a href="#" title="حساب کاربری"><i class="fas fa-user"></i></a>
-                <a href="#" title="علاقه‌مندی‌ها"><i class="fas fa-heart"></i></a>
-                <a href="#" title="سبد خرید" style="position:relative;">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span class="cart-count">۳</span>
+        </div>
+
+        <!-- MAIN CARD -->
+        <div class="main-card">
+            <div class="rebuild-message">
+                <h2>🚀 سایت در حال بازسازی اساسی است</h2>
+                <p>
+                    در حال ساخت یک تجربهٔ جدید و حرفه‌ای برای شما هستیم.<br>
+                    به زودی با ظاهری تازه، سرعت بیشتر و امکانات بهتر بازمی‌گردیم.<br>
+                    تا آن زمان، از مسیرهای زیر در خدمت شما هستیم.
+                </p>
+            </div>
+
+            <!-- PHONES -->
+            <div class="section-title">📞 تماس با ما</div>
+            <div class="btn-grid">
+                <a href="tel:09154819081" class="magic-btn phone">
+                    <span class="btn-icon">📱</span>
+                    <span class="btn-label">موبایل</span>
+                </a>
+                <a href="tel:05138819081" class="magic-btn phone">
+                    <span class="btn-icon">☎️</span>
+                    <span class="btn-label">تلفن مغازه</span>
                 </a>
             </div>
-        </div>
-    </header>
 
-    <!-- ==================== منوی ناوبری ==================== -->
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="#" class="active"><i class="fas fa-home"></i> صفحه اصلی</a>
-            <a href="#"><i class="fas fa-pump-soap"></i> شوینده لباس</a>
-            <a href="#"><i class="fas fa-hand-sparkles"></i> ظرفشویی</a>
-            <a href="#"><i class="fas fa-sink"></i> سطوح و آشپزخانه</a>
-            <a href="#"><i class="fas fa-shower"></i> حمام و دستشویی</a>
-            <a href="#"><i class="fas fa-spray-can"></i> ضدعفونی‌کننده</a>
-            <a href="#"><i class="fas fa-percent"></i> تخفیف‌ها</a>
-            <a href="#"><i class="fas fa-star"></i> جدیدترین‌ها</a>
-        </div>
-    </nav>
-
-    <!-- ==================== بخش Hero ==================== -->
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="hero-text animate-in animate-in-delay-1">
-                <span class="badge"><i class="fas fa-fire"></i> پیشنهاد ویژه امروز</span>
-                <h1>تمیزی <span>بی‌نظیر</span> با محصولات اصل</h1>
-                <p>انواع مواد شوینده باکیفیت و اصل را با بهترین قیمت و ارسال سریع از شما شاپ تهیه کنید.</p>
-                <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <a href="#" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> خرید از فروشگاه</a>
-                    <a href="#" class="btn btn-outline"><i class="fas fa-tag"></i> محصولات تخفیف‌دار</a>
-                </div>
+            <!-- SUPPORT -->
+            <div class="section-title">💬 پشتیبانی</div>
+            <div class="btn-grid">
+                <a href="https://t.me/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="magic-btn telegram">
+                    <span class="btn-icon">✈️</span>
+                    <span class="btn-label">تلگرام</span>
+                </a>
+                <a href="https://eitaa.com/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="magic-btn eitaa">
+                    <span class="btn-icon">📨</span>
+                    <span class="btn-label">ایتا</span>
+                </a>
+                <a href="https://rubika.ir/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="magic-btn rubika">
+                    <span class="btn-icon">💎</span>
+                    <span class="btn-label">روبیکا</span>
+                </a>
             </div>
-            <div class="hero-image animate-in animate-in-delay-2">
-                <div class="circle">
-                    <i class="fas fa-pump-soap"></i>
-                </div>
+
+            <!-- CHANNELS -->
+            <div class="section-title">📢 کانال‌ها (محصولات همراه با عکس و قیمت)</div>
+            <div class="btn-grid">
+                <a href="https://eitaa.com/shoma_shop" target="_blank" rel="noopener noreferrer" class="magic-btn eitaa">
+                    <span class="btn-icon">📨</span>
+                    <span class="btn-label">کانال ایتا</span>
+                </a>
+                <a href="https://rubika.ir/shoma_shop" target="_blank" rel="noopener noreferrer" class="magic-btn rubika">
+                    <span class="btn-icon">💎</span>
+                    <span class="btn-label">کانال روبیکا</span>
+                </a>
+                <a href="https://t.me/yourclean_bot" target="_blank" rel="noopener noreferrer" class="magic-btn telegram">
+                    <span class="btn-icon">🤖</span>
+                    <span class="btn-label">ربات تلگرام</span>
+                </a>
             </div>
-        </div>
-    </section>
 
-    <!-- ==================== دسته‌بندی‌ها ==================== -->
-    <section class="section">
-        <div class="section-header">
-            <h2><i class="fas fa-th-large"></i> دسته‌بندی محصولات</h2>
-            <a href="#">مشاهده همه <i class="fas fa-chevron-left"></i></a>
-        </div>
-        <div class="categories-grid">
-            <a href="#" class="category-card animate-in animate-in-delay-1">
-                <div class="icon-circle"><i class="fas fa-tshirt"></i></div>
-                <span>شوینده لباس</span>
-            </a>
-            <a href="#" class="category-card animate-in animate-in-delay-2">
-                <div class="icon-circle"><i class="fas fa-wine-glass"></i></div>
-                <span>مایع ظرفشویی</span>
-            </a>
-            <a href="#" class="category-card animate-in animate-in-delay-3">
-                <div class="icon-circle"><i class="fas fa-broom"></i></div>
-                <span>تمیزکننده سطوح</span>
-            </a>
-            <a href="#" class="category-card animate-in animate-in-delay-4">
-                <div class="icon-circle"><i class="fas fa-toilet"></i></div>
-                <span>بهداشتی و حمام</span>
-            </a>
-            <a href="#" class="category-card animate-in animate-in-delay-5">
-                <div class="icon-circle"><i class="fas fa-shield-virus"></i></div>
-                <span>ضدعفونی‌کننده</span>
-            </a>
-            <a href="#" class="category-card animate-in animate-in-delay-1">
-                <div class="icon-circle"><i class="fas fa-leaf"></i></div>
-                <span>ارگانیک و طبیعی</span>
-            </a>
-            <a href="#" class="category-card animate-in animate-in-delay-2">
-                <div class="icon-circle"><i class="fas fa-box-open"></i></div>
-                <span>پک‌های ویژه</span>
-            </a>
-            <a href="#" class="category-card animate-in animate-in-delay-3">
-                <div class="icon-circle"><i class="fas fa-spray-can-sparkles"></i></div>
-                <span>اسپری و خوشبوکننده</span>
-            </a>
-        </div>
-    </section>
+            <!-- INSTAGRAM -->
+            <div class="section-title">📷 اینستاگرام</div>
+            <div class="btn-grid" style="grid-template-columns: 1fr;">
+                <a href="https://instagram.com/shoma_shop.ir" target="_blank" rel="noopener noreferrer" class="magic-btn instagram">
+                    <span class="btn-icon">📷</span>
+                    <span class="btn-label">@shoma_shop.ir</span>
+                </a>
+            </div>
 
-    <!-- ==================== محصولات ویژه ==================== -->
-    <section class="section">
-        <div class="section-header">
-            <h2><i class="fas fa-star" style="color:#f4a825;"></i> محصولات پرفروش</h2>
-            <a href="#">مشاهده همه <i class="fas fa-chevron-left"></i></a>
-        </div>
-        <div class="products-grid">
-            <!-- محصول ۱ -->
-            <div class="product-card animate-in animate-in-delay-1">
-                <div class="img-wrap">
-                    <span class="discount-badge">٪۲۰</span>
-                    <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
-                    <i class="fas fa-jug-detergent product-icon"></i>
-                </div>
-                <div class="product-info">
-                    <span class="category-tag">شوینده لباس</span>
-                    <h3>مایع لباسشویی پریل ۲.۷ لیتری</h3>
-                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <span>(۱۲۸ نظر)</span></div>
-                    <div class="price-row">
-                        <span class="price">۲۸۵,۰۰۰ تومان</span>
-                        <span class="old-price">۳۵۶,۰۰۰</span>
+            <!-- ADDRESS & MAPS -->
+            <div class="section-title">📍 آدرس و مسیریابی</div>
+            <div class="address-row">
+                <span class="address-text">🏠 مشهد، بین هنرور ۲۰ و ۲۲</span>
+            </div>
+            <div class="btn-grid">
+                <a href="https://nshn.ir/35rb1MaUNJjDV8" target="_blank" rel="noopener noreferrer" class="magic-btn map-btn">
+                    <span class="btn-icon">🗺️</span>
+                    <span class="btn-label">مسیریابی با نشان</span>
+                </a>
+                <a href="https://maps.app.goo.gl/uNBXZpBYdt5nAJBKA" target="_blank" rel="noopener noreferrer" class="magic-btn map-btn">
+                    <span class="btn-icon">📍</span>
+                    <span class="btn-label">گوگل مپ</span>
+                </a>
+            </div>
+
+            <!-- WORKING HOURS -->
+            <div class="section-title">⏰ ساعت کاری</div>
+            <div class="hours-card" id="hoursCard">
+                <div class="hours-row">
+                    <div class="hours-block">
+                        ☀️ صبح
+                        <span>۹:۰۰ – ۱۴:۰۰</span>
                     </div>
-                    <button class="add-to-cart"><i class="fas fa-cart-plus"></i> افزودن به سبد</button>
-                </div>
-            </div>
-            <!-- محصول ۲ -->
-            <div class="product-card animate-in animate-in-delay-2">
-                <div class="img-wrap">
-                    <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
-                    <i class="fas fa-bottle-droplet product-icon" style="color:#4ecdc4;"></i>
-                </div>
-                <div class="product-info">
-                    <span class="category-tag">ظرفشویی</span>
-                    <h3>مایع ظرفشویی گلرنگ ۱ لیتری</h3>
-                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(۲۵۶ نظر)</span></div>
-                    <div class="price-row">
-                        <span class="price">۹۸,۰۰۰ تومان</span>
+                    <div class="hours-block">
+                        🌙 عصر
+                        <span>۱۷:۰۰ – ۲۲:۰۰</span>
                     </div>
-                    <button class="add-to-cart"><i class="fas fa-cart-plus"></i> افزودن به سبد</button>
                 </div>
-            </div>
-            <!-- محصول ۳ -->
-            <div class="product-card animate-in animate-in-delay-3">
-                <div class="img-wrap">
-                    <span class="discount-badge">٪۱۵</span>
-                    <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
-                    <i class="fas fa-spray-can-sparkles product-icon" style="color:#6c5ce7;"></i>
-                </div>
-                <div class="product-info">
-                    <span class="category-tag">سطوح</span>
-                    <h3>اسپری چندمنظوره سطوح ۵۰۰ml</h3>
-                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <span>(۸۹ نظر)</span></div>
-                    <div class="price-row">
-                        <span class="price">۱۴۵,۰۰۰ تومان</span>
-                        <span class="old-price">۱۷۰,۰۰۰</span>
+                <div class="hours-row" style="margin-top:10px;">
+                    <div class="hours-block" style="border-color: rgba(239,68,68,0.25);">
+                        📅 روزهای کاری
+                        <span>شنبه تا پنجشنبه</span>
                     </div>
-                    <button class="add-to-cart"><i class="fas fa-cart-plus"></i> افزودن به سبد</button>
-                </div>
-            </div>
-            <!-- محصول ۴ -->
-            <div class="product-card animate-in animate-in-delay-4">
-                <div class="img-wrap">
-                    <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
-                    <i class="fas fa-soap product-icon" style="color:#fdcb6e;"></i>
-                </div>
-                <div class="product-info">
-                    <span class="category-tag">بهداشتی</span>
-                    <h3>صابون مایع داو ۵۰۰ میلی‌لیتری</h3>
-                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(۴۱۲ نظر)</span></div>
-                    <div class="price-row">
-                        <span class="price">۱۲۵,۰۰۰ تومان</span>
+                    <div class="hours-block" style="border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.04);">
+                        ❌ تعطیل
+                        <span>جمعه‌ها</span>
                     </div>
-                    <button class="add-to-cart"><i class="fas fa-cart-plus"></i> افزودن به سبد</button>
+                </div>
+                <div class="online-note">
+                    <span class="dot-indicator"></span> خرید اینترنتی همه روزه (حتی جمعه‌ها) امکان‌پذیر است
                 </div>
             </div>
-            <!-- محصول ۵ -->
-            <div class="product-card animate-in animate-in-delay-5">
-                <div class="img-wrap">
-                    <span class="discount-badge">٪۳۰</span>
-                    <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
-                    <i class="fas fa-jug-detergent product-icon" style="color:#00b894;"></i>
-                </div>
-                <div class="product-info">
-                    <span class="category-tag">لباسشویی</span>
-                    <h3>پودر لباسشویی پرسیل ۴ کیلویی</h3>
-                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <span>(۱۹۵ نظر)</span></div>
-                    <div class="price-row">
-                        <span class="price">۳۴۰,۰۰۰ تومان</span>
-                        <span class="old-price">۴۸۵,۰۰۰</span>
-                    </div>
-                    <button class="add-to-cart"><i class="fas fa-cart-plus"></i> افزودن به سبد</button>
-                </div>
-            </div>
-            <!-- محصول ۶ -->
-            <div class="product-card animate-in animate-in-delay-1">
-                <div class="img-wrap">
-                    <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
-                    <i class="fas fa-pump-soap product-icon" style="color:#0984e3;"></i>
-                </div>
-                <div class="product-info">
-                    <span class="category-tag">ضدعفونی</span>
-                    <h3>ژل ضدعفونی‌کننده دست ۱ لیتری</h3>
-                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> <span>(۶۷ نظر)</span></div>
-                    <div class="price-row">
-                        <span class="price">۱۶۰,۰۰۰ تومان</span>
-                    </div>
-                    <button class="add-to-cart"><i class="fas fa-cart-plus"></i> افزودن به سبد</button>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- ==================== بنر تخفیف ==================== -->
-    <section class="section">
-        <div class="promo-banner animate-in animate-in-delay-1">
-            <div class="promo-text">
-                <h3><i class="fas fa-bolt"></i> فروش ویژهٔ پایان فصل</h3>
-                <p>تا ۴۰٪ تخفیف برای محصولات شویندهٔ لباس و ظرفشویی</p>
+            <!-- INFO BADGES -->
+            <div class="info-badges">
+                <span class="info-badge">🛒 امکان خرید حضوری و غیرحضوری</span>
+                <span class="info-badge">📦 ارسال درون‌شهری با اسنپ باکس</span>
+                <span class="info-badge">🚚 ارسال سراسری با پست</span>
+                <span class="info-badge">🎁 ارسال رایگان در محدوده</span>
+                <span class="info-badge">💰 هدف: زیر قیمت مصرف‌کننده</span>
             </div>
-            <a href="#" class="btn-white"><i class="fas fa-arrow-left"></i> مشاهده محصولات</a>
         </div>
-    </section>
 
-    <!-- ==================== ویژگی‌های فروشگاه ==================== -->
-    <section class="section">
-        <div class="features-row">
-            <div class="feature-item animate-in animate-in-delay-1">
-                <i class="fas fa-truck-fast"></i>
-                <h4>ارسال سریع</h4>
-                <p>تحویل ۱ تا ۳ روزه در سراسر کشور</p>
-            </div>
-            <div class="feature-item animate-in animate-in-delay-2">
-                <i class="fas fa-shield-haltered"></i>
-                <h4>ضمانت اصالت</h4>
-                <p>تضمین کیفیت و اصل بودن کالا</p>
-            </div>
-            <div class="feature-item animate-in animate-in-delay-3">
-                <i class="fas fa-headset"></i>
-                <h4>پشتیبانی ۲۴/۷</h4>
-                <p>پاسخگویی در تمام روزهای هفته</p>
-            </div>
-            <div class="feature-item animate-in animate-in-delay-4">
-                <i class="fas fa-rotate-left"></i>
-                <h4>بازگشت آسان</h4>
-                <p>۷ روز ضمانت بازگشت کالا</p>
-            </div>
-        </div>
-    </section>
+        <p class="footer-note">
+            💡 خرید اینترنتی محدود به ساعت حضور نیست و همه روزه امکان‌پذیر است.<br>
+            برای مشاهدهٔ محصولات با عکس و قیمت، به کانال‌های ما سر بزنید.<br>
+            سپاس از شکیبایی شما — به زودی با سایتی حرفه‌ای در خدمتتان هستیم 🙏
+        </p>
+    </div>
 
-    <!-- ==================== فوتر ==================== -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-col">
-                <h4>شما شاپ</h4>
-                <p>فروشگاه اینترنتی مواد شوینده با ضمانت اصالت کالا و بهترین قیمت. تمیزی را با ما تجربه کنید.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-telegram"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-            <div class="footer-col">
-                <h4>دسترسی سریع</h4>
-                <a href="#">صفحه اصلی</a>
-                <a href="#">محصولات</a>
-                <a href="#">تخفیف‌ها</a>
-                <a href="#">جدیدترین‌ها</a>
-                <a href="#">تماس با ما</a>
-            </div>
-            <div class="footer-col">
-                <h4>خدمات مشتریان</h4>
-                <a href="#">سوالات متداول</a>
-                <a href="#">راهنمای خرید</a>
-                <a href="#">شرایط بازگشت</a>
-                <a href="#">پیگیری سفارش</a>
-                <a href="#">قوانین و مقررات</a>
-            </div>
-            <div class="footer-col">
-                <h4>اطلاعات تماس</h4>
-                <p><i class="fas fa-phone"></i> ۰۲۱-۱۲۳۴۵۶۷۸</p>
-                <p><i class="fas fa-mobile-alt"></i> ۰۹۱۲۳۴۵۶۷۸۹</p>
-                <p><i class="fas fa-envelope"></i> info@pakizeshop.ir</p>
-                <p><i class="fas fa-map-marker-alt"></i> تهران، خیابان ولیعصر</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© ۱۴۰۴ تمامی حقوق برای فروشگاه شما شاپ محفوظ است. طراحی شده با <i class="fas fa-heart" style="color:#ff6b6b;"></i></p>
-        </div>
-    </footer>
-
-    <!-- ==================== اسکریپت‌های ساده ==================== -->
     <script>
-        // تغییر استایل هدر هنگام اسکرول
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        (function() {
+            // ============ PARTICLE CANVAS ============
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouse = { x: -500, y: -500 };
+            let animationId;
+            const PARTICLE_COUNT = 90;
+            const CONNECTION_DIST = 130;
+            const MOUSE_INFLUENCE = 180;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
-        });
+            resizeCanvas();
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                initParticles();
+            });
 
-        // انیمیشن ظاهر شدن المان‌ها هنگام اسکرول (Intersection Observer)
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -40px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+            class Particle {
+                constructor() {
+                    this.reset();
+                    // randomize initial position
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
                 }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.6;
+                    this.vy = (Math.random() - 0.5) * 0.6;
+                    this.radius = Math.random() * 1.8 + 0.7;
+                    this.baseOpacity = Math.random() * 0.5 + 0.2;
+                    this.opacity = this.baseOpacity;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    // wrap around
+                    if (this.x < -20) this.x = canvas.width + 20;
+                    if (this.x > canvas.width + 20) this.x = -20;
+                    if (this.y < -20) this.y = canvas.height + 20;
+                    if (this.y > canvas.height + 20) this.y = -20;
+                    // mouse repulsion
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < MOUSE_INFLUENCE && dist > 0) {
+                        const force = (MOUSE_INFLUENCE - dist) / MOUSE_INFLUENCE;
+                        const angle = Math.atan2(dy, dx);
+                        this.vx += Math.cos(angle) * force * 0.3;
+                        this.vy += Math.sin(angle) * force * 0.3;
+                        this.opacity = Math.min(1, this.baseOpacity + force * 0.6);
+                    } else {
+                        this.opacity += (this.baseOpacity - this.opacity) * 0.05;
+                    }
+                    // dampen
+                    const maxSpeed = 1.2;
+                    const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                    if (speed > maxSpeed) {
+                        this.vx = (this.vx / speed) * maxSpeed;
+                        this.vy = (this.vy / speed) * maxSpeed;
+                    }
+                }
+                draw(ctx) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(180,210,240,${this.opacity.toFixed(3)})`;
+                    ctx.fill();
+                    // tiny glow
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(180,210,240,${(this.opacity * 0.2).toFixed(3)})`;
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            initParticles();
+
+            function drawConnections() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < CONNECTION_DIST) {
+                            const alpha = (1 - dist / CONNECTION_DIST) * 0.15;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(160,200,240,${alpha.toFixed(3)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw(ctx);
+                });
+                drawConnections();
+                animationId = requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            document.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
             });
-        }, observerOptions);
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    mouse.x = e.touches[0].clientX;
+                    mouse.y = e.touches[0].clientY;
+                }
+            }, { passive: true });
 
-        document.querySelectorAll('.animate-in').forEach(el => {
-            observer.observe(el);
-        });
-
-        // کلیک روی دکمه‌های افزودن به سبد (نمایش ساده)
-        document.querySelectorAll('.add-to-cart').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const originalHTML = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-check"></i> افزوده شد';
-                this.style.background = '#27ae60';
-                setTimeout(() => {
-                    this.innerHTML = originalHTML;
-                    this.style.background = '';
-                }, 1800);
+            // ============ MAGIC BUTTON MOUSE TRACKING ============
+            const magicButtons = document.querySelectorAll('.magic-btn');
+            magicButtons.forEach(btn => {
+                btn.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    this.style.setProperty('--mouse-x', x + 'px');
+                    this.style.setProperty('--mouse-y', y + 'px');
+                });
+                btn.addEventListener('mouseleave', function() {
+                    this.style.setProperty('--mouse-x', '50%');
+                    this.style.setProperty('--mouse-y', '50%');
+                });
             });
-        });
 
-        // کلیک روی دکمه علاقه‌مندی
-        document.querySelectorAll('.wishlist-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                const icon = this.querySelector('i');
-                if (icon.style.color === 'rgb(231, 76, 60)' || icon.style.color === '#e74c3c') {
-                    icon.style.color = '#ccc';
+            // ============ WORKING HOURS LOGIC (Tehran Time) ============
+            function getTehranDateTime() {
+                const now = new Date();
+                const tehranStr = now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' });
+                return new Date(tehranStr);
+            }
+
+            function getPersianDayIndex(tehranDate) {
+                // JS getDay(): 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+                const jsDay = tehranDate.getDay();
+                // Persian week: 0=Sat, 1=Sun, 2=Mon, 3=Tue, 4=Wed, 5=Thu, 6=Fri
+                if (jsDay === 6) return 0; // Saturday
+                if (jsDay === 5) return 6; // Friday
+                return jsDay + 1; // Sun->1, Mon->2, ..., Thu->5
+            }
+
+            function getStatus() {
+                const tehran = getTehranDateTime();
+                const persianDay = getPersianDayIndex(tehran);
+                const hour = tehran.getHours();
+                const minute = tehran.getMinutes();
+                const totalMinutes = hour * 60 + minute;
+
+                // Friday (persianDay 6) = closed
+                if (persianDay === 6) {
+                    return { status: 'closed', reason: 'friday', tehran, persianDay };
+                }
+
+                // Working days: Sat-Thu (persianDay 0-5)
+                const morningOpen = 9 * 60; // 9:00 = 540 min
+                const morningClose = 14 * 60; // 14:00 = 840 min
+                const eveningOpen = 17 * 60; // 17:00 = 1020 min
+                const eveningClose = 22 * 60; // 22:00 = 1320 min
+
+                // Check if within working hours
+                if (totalMinutes >= morningOpen && totalMinutes < morningClose) {
+                    return { status: 'open', tehran, persianDay, shift: 'morning' };
+                }
+                if (totalMinutes >= eveningOpen && totalMinutes < eveningClose) {
+                    return { status: 'open', tehran, persianDay, shift: 'evening' };
+                }
+
+                // Check "opening soon" (30 min before opening)
+                const soonThreshold = 30;
+                if (totalMinutes >= (morningOpen - soonThreshold) && totalMinutes < morningOpen) {
+                    return { status: 'soon', tehran, persianDay, opensAt: '۹:۰۰', minutesLeft: morningOpen -
+                            totalMinutes };
+                }
+                if (totalMinutes >= (eveningOpen - soonThreshold) && totalMinutes < eveningOpen) {
+                    return { status: 'soon', tehran, persianDay, opensAt: '۱۷:۰۰', minutesLeft: eveningOpen -
+                            totalMinutes };
+                }
+
+                return { status: 'closed', reason: 'out_of_hours', tehran, persianDay };
+            }
+
+            function updateStatusUI() {
+                const statusData = getStatus();
+                const badge = document.getElementById('statusBadge');
+                const dot = document.getElementById('statusDot');
+                const text = document.getElementById('statusText');
+
+                // Remove all classes
+                badge.classList.remove('open', 'closed', 'soon');
+                dot.classList.remove('open-dot', 'closed-dot', 'soon-dot');
+
+                if (statusData.status === 'open') {
+                    badge.classList.add('open');
+                    dot.classList.add('open-dot');
+                    const shiftLabel = statusData.shift === 'morning' ? ' (شیفت صبح)' : ' (شیفت عصر)';
+                    text.textContent = '🟢 هم‌اکنون باز است' + shiftLabel;
+                } else if (statusData.status === 'soon') {
+                    badge.classList.add('soon');
+                    dot.classList.add('soon-dot');
+                    text.textContent =
+                        `🟡 به زودی باز می‌شود — ${statusData.minutesLeft} دقیقه دیگر (ساعت ${statusData.opensAt})`;
                 } else {
-                    icon.style.color = '#e74c3c';
+                    badge.classList.add('closed');
+                    dot.classList.add('closed-dot');
+                    if (statusData.reason === 'friday') {
+                        text.textContent = '🔴 امروز جمعه — فروشگاه تعطیل | خرید اینترنتی فعال است';
+                    } else {
+                        text.textContent = '🔴 هم‌اکنون بسته است | خرید اینترنتی همچنان فعال';
+                    }
                 }
-                icon.style.transform = 'scale(1.4)';
-                setTimeout(() => { icon.style.transform = 'scale(1)'; }, 200);
-            });
-        });
+            }
 
-        console.log('✅ قالب فروشگاه مواد شوینده با موفقیت بارگذاری شد!');
+            updateStatusUI();
+            // Update every 60 seconds
+            setInterval(updateStatusUI, 60000);
+
+            // ============ INITIAL MOUSE POSITIONS FOR BUTTONS ============
+            magicButtons.forEach(btn => {
+                btn.style.setProperty('--mouse-x', '50%');
+                btn.style.setProperty('--mouse-y', '50%');
+            });
+
+            console.log('%c✨ شما شاپ — سایت در حال بازسازی %c| %cتمام بخش‌های ارتباطی فعال هستند',
+                'font-size:1.2em;color:#2dd4bf;',
+                '',
+                'color:#f59e0b;');
+            console.log('%c📦 وضعیت فروشگاه: %c' + document.getElementById('statusText').textContent,
+                'color:#94a3b8;', 'color:#e2e8f0;');
+        })();
     </script>
 </body>
 </html>
