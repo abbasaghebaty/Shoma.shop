@@ -20,15 +20,14 @@
             --border-light: #f1f5f9;
             --primary: #0d9488;
             --primary-light: #ccfbf1;
-            --primary-hover: #0f766e;
             --accent-blue: #2563eb;
-            --accent-blue-light: #dbeafe;
             --accent-green: #16a34a;
             --accent-green-light: #dcfce7;
             --warning: #d97706;
             --warning-light: #fef3c7;
             --danger: #dc2626;
             --danger-light: #fee2e2;
+            --gray-light: #f9fafb;
             --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
             --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.03);
@@ -69,7 +68,7 @@
             gap: 16px;
         }
 
-        /* ============ HEADER ============ */
+        /* HEADER */
         .header {
             text-align: center;
             padding: 24px 8px 8px;
@@ -122,7 +121,7 @@
             margin-top: -4px;
         }
 
-        /* ============ CARD BASE ============ */
+        /* CARD BASE */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -136,7 +135,7 @@
             box-shadow: var(--shadow-md);
         }
 
-        /* ============ REBUILD SECTION ============ */
+        /* REBUILD SECTION */
         .rebuild-card {
             text-align: center;
             padding: 28px 18px;
@@ -165,77 +164,7 @@
             margin: 0 auto;
         }
 
-        /* ============ STATUS BOX ============ */
-        .status-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 16px;
-            border-radius: var(--radius);
-            font-weight: 600;
-            font-size: 0.92rem;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-        }
-
-        .status-box.open {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
-        }
-
-        .status-box.closed {
-            background: #fef2f2;
-            border-color: #fecaca;
-        }
-
-        .status-box.soon {
-            background: #fffbeb;
-            border-color: #fde68a;
-        }
-
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .status-indicator.open-dot {
-            background: #16a34a;
-        }
-
-        .status-indicator.closed-dot {
-            background: #dc2626;
-        }
-
-        .status-indicator.soon-dot {
-            background: #d97706;
-            animation: softPulse 1.8s ease-in-out infinite;
-        }
-
-        @keyframes softPulse {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(1.3);
-            }
-        }
-
-        .status-message {
-            flex: 1;
-            font-weight: 600;
-            font-size: 0.88rem;
-            color: var(--text-primary);
-        }
-
-        /* ============ BUTTONS GRID ============ */
+        /* SECTION LABEL */
         .section-label {
             font-size: 0.78rem;
             font-weight: 700;
@@ -246,6 +175,7 @@
             padding-right: 4px;
         }
 
+        /* BUTTONS */
         .btn-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -334,7 +264,6 @@
             border-color: #e2e8f0;
             background: #ffffff;
             color: #1e293b;
-            font-weight: 600;
         }
 
         .btn-outline.map-btn:hover {
@@ -353,12 +282,187 @@
             font-size: 0.82rem;
         }
 
-        /* Single column variant */
         .btn-full {
             grid-column: span 2;
         }
 
-        /* ============ ADDRESS CARD ============ */
+        /* STATUS CARD */
+        .status-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            box-shadow: var(--shadow);
+            transition: background 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .status-card.open {
+            background: #ffffff;
+            border-color: #bbf7d0;
+        }
+
+        .status-card.soon {
+            background: #ffffff;
+            border-color: #fde68a;
+        }
+
+        .status-card.holiday {
+            background: #f9fafb;
+            border-color: #e5e7eb;
+        }
+
+        .status-card.closed {
+            background: #ffffff;
+            border-color: #e2e8f0;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .status-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .status-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .status-text-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+
+        .status-card.open .status-title {
+            color: #166534;
+        }
+
+        .status-card.soon .status-title {
+            color: #92400e;
+        }
+
+        .status-card.holiday .status-title {
+            color: #dc2626;
+        }
+
+        .status-card.closed .status-title {
+            color: var(--text-primary);
+        }
+
+        .status-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .toggle-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .toggle-arrow:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .toggle-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .schedule-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease, opacity 0.3s ease;
+            opacity: 0;
+            border-top: 1px solid transparent;
+            margin-top: 8px;
+        }
+
+        .schedule-panel.visible {
+            max-height: 400px;
+            opacity: 1;
+            border-top-color: var(--border-light);
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        .schedule-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .schedule-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--off-white);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            font-weight: 500;
+        }
+
+        .schedule-list .day-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .schedule-list .day-hours {
+            color: var(--text-muted);
+        }
+
+        /* ONLINE SHOPPING NOTE */
+        .online-shopping-note {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #166534;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ADDRESS CARD */
         .address-card {
             display: flex;
             flex-direction: column;
@@ -389,7 +493,7 @@
             min-width: 130px;
         }
 
-        /* ============ TRUST SECTION ============ */
+        /* TRUST BADGES */
         .trust-badges {
             display: flex;
             flex-wrap: wrap;
@@ -412,7 +516,7 @@
             white-space: nowrap;
         }
 
-        /* ============ FOOTER ============ */
+        /* FOOTER */
         .footer {
             text-align: center;
             padding: 20px 10px;
@@ -427,7 +531,6 @@
             font-weight: 700;
         }
 
-        /* ============ RESPONSIVE ADJUSTMENTS ============ */
         @media (max-width: 380px) {
             .btn-grid {
                 grid-template-columns: 1fr;
@@ -447,15 +550,6 @@
                 width: 56px;
                 height: 56px;
                 font-size: 1.8rem;
-            }
-        }
-
-        @media (min-width: 520px) {
-            .btn-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .container {
-                gap: 18px;
             }
         }
     </style>
@@ -479,10 +573,34 @@
             </p>
         </section>
 
-        <!-- STORE STATUS -->
-        <div class="status-box" id="storeStatus" aria-live="polite">
-            <span class="status-indicator" id="statusDot"></span>
-            <span class="status-message" id="statusMessage">در حال بررسی...</span>
+        <!-- STATUS SECTION -->
+        <div class="status-card" id="statusCard" aria-live="polite">
+            <div class="status-header" id="statusHeader">
+                <div class="status-main">
+                    <span class="status-icon" id="statusIcon"></span>
+                    <div class="status-text-block">
+                        <span class="status-title" id="statusTitle"></span>
+                        <span class="status-subtitle" id="statusSubtitle"></span>
+                    </div>
+                </div>
+                <button class="toggle-arrow" id="toggleArrow" aria-label="نمایش ساعت کاری هفته">▼</button>
+            </div>
+            <div class="schedule-panel" id="schedulePanel">
+                <ul class="schedule-list">
+                    <li><span class="day-name">شنبه</span><span class="day-hours">۹:۰۰ – ۱۴:۰۰ / ۱۷:۰۰ – ۲۲:۰۰</span></li>
+                    <li><span class="day-name">یکشنبه</span><span class="day-hours">۹:۰۰ – ۱۴:۰۰ / ۱۷:۰۰ – ۲۲:۰۰</span></li>
+                    <li><span class="day-name">دوشنبه</span><span class="day-hours">۹:۰۰ – ۱۴:۰۰ / ۱۷:۰۰ – ۲۲:۰۰</span></li>
+                    <li><span class="day-name">سه‌شنبه</span><span class="day-hours">۹:۰۰ – ۱۴:۰۰ / ۱۷:۰۰ – ۲۲:۰۰</span></li>
+                    <li><span class="day-name">چهارشنبه</span><span class="day-hours">۹:۰۰ – ۱۴:۰۰ / ۱۷:۰۰ – ۲۲:۰۰</span></li>
+                    <li><span class="day-name">پنجشنبه</span><span class="day-hours">۹:۰۰ – ۱۴:۰۰ / ۱۷:۰۰ – ۲۲:۰۰</span></li>
+                    <li><span class="day-name">جمعه</span><span class="day-hours" style="color:#dc2626;">تعطیل</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ONLINE SHOPPING NOTE -->
+        <div class="online-shopping-note">
+            <span>🛒</span> خرید اینترنتی همه روزه (حتی جمعه‌ها) فعال است
         </div>
 
         <!-- CONTACT BUTTONS -->
@@ -549,9 +667,7 @@
         <!-- ADDRESS & MAPS -->
         <section class="card address-card" aria-labelledby="address-heading">
             <div class="section-label" style="text-align:center;">📍 آدرس فروشگاه</div>
-            <p class="address-text" id="address-heading">
-                🏠 مشهد، بین هنرور ۲۰ و ۲۲
-            </p>
+            <p class="address-text" id="address-heading">🏠 مشهد، بین هنرور ۲۰ و ۲۲</p>
             <div class="map-buttons">
                 <a href="https://nshn.ir/35rb1MaUNJjDV8" target="_blank" rel="noopener noreferrer" class="btn-outline map-btn" aria-label="مشاهده در نشان">
                     <span class="btn-icon">🗺️</span>
@@ -583,21 +699,29 @@
 
     <script>
         (function() {
-            const statusBox = document.getElementById('storeStatus');
-            const statusDot = document.getElementById('statusDot');
-            const statusMessage = document.getElementById('statusMessage');
+            const statusCard = document.getElementById('statusCard');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusSubtitle = document.getElementById('statusSubtitle');
+            const toggleArrow = document.getElementById('toggleArrow');
+            const schedulePanel = document.getElementById('schedulePanel');
+            const statusHeader = document.getElementById('statusHeader');
 
             function getTehranTime() {
                 const now = new Date();
-                const tehranString = now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' });
-                return new Date(tehranString);
+                const tehranStr = now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' });
+                return new Date(tehranStr);
             }
 
             function getPersianDayIndex(date) {
                 const jsDay = date.getDay();
                 if (jsDay === 6) return 0; // Saturday
                 if (jsDay === 5) return 6; // Friday
-                return jsDay + 1;
+                return jsDay + 1; // Sun=1, Mon=2, ..., Thu=5
+            }
+
+            function formatTime(hour, minute = 0) {
+                return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
             }
 
             function getStoreStatus() {
@@ -605,63 +729,122 @@
                 const persianDay = getPersianDayIndex(tehran);
                 const totalMinutes = tehran.getHours() * 60 + tehran.getMinutes();
 
-                const morningOpen = 9 * 60; // 9:00
-                const morningClose = 14 * 60; // 14:00
-                const eveningOpen = 17 * 60; // 17:00
-                const eveningClose = 22 * 60; // 22:00
+                const morningOpen = 9 * 60;
+                const morningClose = 14 * 60;
+                const eveningOpen = 17 * 60;
+                const eveningClose = 22 * 60;
 
-                // Friday (6) = closed
+                // Friday holiday
                 if (persianDay === 6) {
-                    return { status: 'closed', reason: 'friday' };
+                    return {
+                        status: 'holiday',
+                        mainText: '⚪ فروشگاه امروز تعطیل است',
+                        subText: 'فردا از ساعت ۰۹:۰۰ فعالیت شروع می‌شود.',
+                        cardClass: 'holiday'
+                    };
                 }
 
-                // Working days (0-5)
-                if (totalMinutes >= morningOpen && totalMinutes < morningClose) {
-                    return { status: 'open', shift: 'morning' };
-                }
-                if (totalMinutes >= eveningOpen && totalMinutes < eveningClose) {
-                    return { status: 'open', shift: 'evening' };
-                }
+                // Working days
+                const isMorningOpen = (totalMinutes >= morningOpen && totalMinutes < morningClose);
+                const isEveningOpen = (totalMinutes >= eveningOpen && totalMinutes < eveningClose);
 
-                // Soon (30 min before opening)
-                if (totalMinutes >= (morningOpen - 30) && totalMinutes < morningOpen) {
-                    return { status: 'soon', opensAt: '۹:۰۰', minutesLeft: morningOpen - totalMinutes };
-                }
-                if (totalMinutes >= (eveningOpen - 30) && totalMinutes < eveningOpen) {
-                    return { status: 'soon', opensAt: '۱۷:۰۰', minutesLeft: eveningOpen - totalMinutes };
+                if (isMorningOpen || isEveningOpen) {
+                    const closingTime = isMorningOpen ? '۱۴:۰۰' : '۲۲:۰۰';
+                    return {
+                        status: 'open',
+                        mainText: '🟢 فروشگاه باز است',
+                        subText: `تا ساعت ${closingTime} در خدمت شما هستیم.`,
+                        cardClass: 'open'
+                    };
                 }
 
-                return { status: 'closed', reason: 'out_of_hours' };
-            }
+                // Opening soon (within 60 min before morning or evening opening)
+                if (totalMinutes >= (morningOpen - 60) && totalMinutes < morningOpen) {
+                    return {
+                        status: 'opening-soon',
+                        mainText: '🟡 به زودی باز می‌شود',
+                        subText: 'شروع فعالیت ساعت ۰۹:۰۰',
+                        cardClass: 'soon'
+                    };
+                }
+                if (totalMinutes >= (eveningOpen - 60) && totalMinutes < eveningOpen) {
+                    return {
+                        status: 'opening-soon',
+                        mainText: '🟡 به زودی باز می‌شود',
+                        subText: 'شروع فعالیت ساعت ۱۷:۰۰',
+                        cardClass: 'soon'
+                    };
+                }
 
-            function updateUI() {
-                const state = getStoreStatus();
-                statusBox.classList.remove('open', 'closed', 'soon');
-                statusDot.classList.remove('open-dot', 'closed-dot', 'soon-dot');
+                // Closing soon (within 60 min before end of shift)
+                if (totalMinutes >= (morningClose - 60) && totalMinutes < morningClose) {
+                    return {
+                        status: 'closing-soon',
+                        mainText: '🟡 به زودی تعطیل می‌شود',
+                        subText: 'تا ساعت ۱۴:۰۰ پذیرای شما هستیم.',
+                        cardClass: 'soon'
+                    };
+                }
+                if (totalMinutes >= (eveningClose - 60) && totalMinutes < eveningClose) {
+                    return {
+                        status: 'closing-soon',
+                        mainText: '🟡 به زودی تعطیل می‌شود',
+                        subText: 'تا ساعت ۲۲:۰۰ پذیرای شما هستیم.',
+                        cardClass: 'soon'
+                    };
+                }
 
-                if (state.status === 'open') {
-                    statusBox.classList.add('open');
-                    statusDot.classList.add('open-dot');
-                    const shiftText = state.shift === 'morning' ? ' (شیفت صبح)' : ' (شیفت عصر)';
-                    statusMessage.textContent = '🟢 فروشگاه باز است' + shiftText;
-                } else if (state.status === 'soon') {
-                    statusBox.classList.add('soon');
-                    statusDot.classList.add('soon-dot');
-                    statusMessage.textContent =
-                        `🟡 به زودی باز می‌شود — ${state.minutesLeft} دقیقه دیگر (ساعت ${state.opensAt})`;
+                // Otherwise closed (outside working hours on a working day)
+                // Show next opening time
+                let nextOpening = '';
+                if (totalMinutes < morningOpen) {
+                    nextOpening = 'شروع فعالیت ساعت ۰۹:۰۰';
+                } else if (totalMinutes < eveningOpen) {
+                    nextOpening = 'شروع فعالیت عصر ساعت ۱۷:۰۰';
                 } else {
-                    statusBox.classList.add('closed');
-                    statusDot.classList.add('closed-dot');
-                    if (state.reason === 'friday') {
-                        statusMessage.textContent = '🔴 فروشگاه بسته است (جمعه تعطیل) | خرید اینترنتی فعال';
-                    } else {
-                        statusMessage.textContent = '🔴 فروشگاه بسته است | خرید اینترنتی همیشه فعال';
-                    }
+                    // After evening close, next day morning
+                    nextOpening = 'فردا ساعت ۰۹:۰۰';
+                }
+                return {
+                    status: 'closed',
+                    mainText: '⚫ فروشگاه بسته است',
+                    subText: nextOpening,
+                    cardClass: 'closed'
+                };
+            }
+
+            function updateStatusUI() {
+                const state = getStoreStatus();
+                statusCard.className = 'status-card ' + state.cardClass;
+                statusTitle.textContent = state.mainText;
+                statusSubtitle.textContent = state.subText;
+            }
+
+            // Accordion toggle
+            let scheduleOpen = false;
+            function toggleSchedule() {
+                scheduleOpen = !scheduleOpen;
+                if (scheduleOpen) {
+                    schedulePanel.classList.add('visible');
+                    toggleArrow.classList.add('open');
+                } else {
+                    schedulePanel.classList.remove('visible');
+                    toggleArrow.classList.remove('open');
                 }
             }
 
-            updateUI();
-            setInterval(updateUI, 60000);
+            toggleArrow.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleSchedule();
+            });
+
+            statusHeader.addEventListener('click', () => {
+                toggleSchedule();
+            });
+
+            // Initial update
+            updateStatusUI();
+            setInterval(updateStatusUI, 60000);
         })();
     </script>
 </body>
