@@ -3,30 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شما شاپ | شوینده بهداشتی شما</title>
-    <meta name="description" content="شما شاپ | شوینده بهداشتی شما - در حال بازسازی سایت">
+    <title>شما شاپ | شوینده و محصولات بهداشتی با قیمت به‌روز</title>
+    <meta name="description" content="فروشگاه اینترنتی شما شاپ - عرضه‌کننده شوینده و محصولات بهداشتی معتبر. سایت در حال بازسازی است.">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0f;
-            --card-bg: rgba(20, 22, 30, 0.85);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --primary: #2dd4bf;
-            --primary-glow: rgba(45, 212, 191, 0.4);
-            --accent: #f59e0b;
-            --accent-glow: rgba(245, 158, 11, 0.4);
-            --text: #e2e8f0;
-            --text-secondary: #94a3b8;
+            --white: #ffffff;
+            --off-white: #f8fafc;
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
             --text-muted: #64748b;
-            --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.5);
-            --success: #22c55e;
-            --success-glow: rgba(34, 197, 94, 0.5);
-            --warning: #f59e0b;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 10px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --primary: #0d9488;
+            --primary-light: #ccfbf1;
+            --primary-hover: #0f766e;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #dbeafe;
+            --accent-green: #16a34a;
+            --accent-green-light: #dcfce7;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.03);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: 0.2s ease;
         }
 
         * {
@@ -36,884 +46,622 @@
         }
 
         body {
-            font-family: 'Vazirmatn', system-ui, sans-serif;
+            font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
             background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
+            color: var(--text-primary);
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            cursor: default;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 12px;
         }
 
-        /* ============ CANVAS BACKGROUND ============ */
-        #particleCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .container {
             width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* ============ MAIN CONTAINER ============ */
-        .main-wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 860px;
+            max-width: 520px;
             margin: 0 auto;
-            padding: 24px 18px 50px;
+            padding: 24px 0 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        /* ============ HERO / HEADER ============ */
-        .hero-section {
+        /* ============ HEADER ============ */
+        .header {
             text-align: center;
-            padding: 40px 10px 20px;
+            padding: 24px 8px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 68px;
+            height: 68px;
+            background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
             position: relative;
+            flex-shrink: 0;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid #e2e8f0;
+            opacity: 0.6;
         }
 
         .brand-name {
-            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-size: 1.8rem;
             font-weight: 900;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #2dd4bf 0%, #60a5fa 40%, #a78bfa 70%, #2dd4bf 100%);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 5s ease-in-out infinite;
-            margin-bottom: 6px;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
             line-height: 1.3;
         }
 
+        .brand-name .accent {
+            color: var(--primary);
+        }
+
         .brand-subtitle {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: -4px;
+        }
+
+        /* ============ CARD BASE ============ */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 18px;
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ============ REBUILD SECTION ============ */
+        .rebuild-card {
+            text-align: center;
+            padding: 28px 18px;
+            background: linear-gradient(to bottom, #f8fafc, #ffffff);
+            border: 1px solid var(--border);
+        }
+
+        .rebuild-icon {
+            font-size: 2.6rem;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .rebuild-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .rebuild-desc {
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            font-weight: 400;
-            letter-spacing: 1px;
+            line-height: 1.9;
+            max-width: 380px;
+            margin: 0 auto;
         }
 
-        @keyframes gradientShift {
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-            25% {
-                background-position: 100% 0%;
-            }
-            50% {
-                background-position: 100% 100%;
-            }
-            75% {
-                background-position: 0% 100%;
-            }
-        }
-
-        /* ============ STATUS BADGE ============ */
-        .status-container {
+        /* ============ STATUS BOX ============ */
+        .status-box {
             display: flex;
-            justify-content: center;
-            margin: 20px 0 10px;
-        }
-
-        .status-badge {
-            display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 22px;
-            border-radius: 50px;
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 0.92rem;
             background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
         }
 
-        .status-badge::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 50px;
-            opacity: 0;
-            transition: opacity 0.5s;
-            z-index: -1;
+        .status-box.open {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
         }
 
-        .status-badge.open::before {
-            background: radial-gradient(ellipse at center, var(--success-glow) 0%, transparent 70%);
-            opacity: 0.25;
-        }
-        .status-badge.closed::before {
-            background: radial-gradient(ellipse at center, var(--danger-glow) 0%, transparent 70%);
-            opacity: 0.2;
-        }
-        .status-badge.soon::before {
-            background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.5) 0%, transparent 70%);
-            opacity: 0.25;
+        .status-box.closed {
+            background: #fef2f2;
+            border-color: #fecaca;
         }
 
-        .status-dot {
-            width: 11px;
-            height: 11px;
+        .status-box.soon {
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             flex-shrink: 0;
-            position: relative;
-        }
-        .status-dot.open-dot {
-            background: var(--success);
-            box-shadow: 0 0 14px var(--success-glow);
-            animation: pulseDot 2s ease-in-out infinite;
-        }
-        .status-dot.closed-dot {
-            background: var(--danger);
-            box-shadow: 0 0 14px var(--danger-glow);
-        }
-        .status-dot.soon-dot {
-            background: var(--warning);
-            box-shadow: 0 0 14px rgba(245, 158, 11, 0.6);
-            animation: pulseDot 1.2s ease-in-out infinite;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
         }
 
-        @keyframes pulseDot {
+        .status-indicator.open-dot {
+            background: #16a34a;
+        }
+
+        .status-indicator.closed-dot {
+            background: #dc2626;
+        }
+
+        .status-indicator.soon-dot {
+            background: #d97706;
+            animation: softPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes softPulse {
             0%,
             100% {
-                box-shadow: 0 0 8px currentColor;
+                opacity: 1;
                 transform: scale(1);
             }
             50% {
-                box-shadow: 0 0 24px currentColor;
-                transform: scale(1.4);
+                opacity: 0.5;
+                transform: scale(1.3);
             }
         }
 
-        .status-text {
+        .status-message {
+            flex: 1;
             font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--text-primary);
         }
 
-        /* ============ MAIN CARD ============ */
-        .main-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-lg);
-            padding: 32px 28px;
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-            margin-bottom: 20px;
-            transition: box-shadow 0.5s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .main-card:hover {
-            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                0 0 80px rgba(45, 212, 191, 0.04);
-        }
-
-        .rebuild-message {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-        .rebuild-message h2 {
-            font-size: 1.4rem;
+        /* ============ BUTTONS GRID ============ */
+        .section-label {
+            font-size: 0.78rem;
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-        .rebuild-message p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.8;
-        }
-
-        /* ============ SECTION TITLES ============ */
-        .section-title {
-            font-size: 0.8rem;
-            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--primary);
-            margin: 24px 0 14px;
-            text-align: center;
-            position: relative;
-        }
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 2px;
-            background: var(--primary);
-            margin: 8px auto 0;
-            border-radius: 2px;
-            opacity: 0.5;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            padding-right: 4px;
         }
 
-        /* ============ BUTTON GRID ============ */
         .btn-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-            gap: 12px;
-            margin: 8px 0 6px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
 
-        /* ============ MAGIC BUTTON ============ */
-        .magic-btn {
-            position: relative;
-            display: inline-flex;
+        .btn-outline {
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 13px 16px;
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text);
+            padding: 13px 8px;
+            border-radius: var(--radius);
             font-family: 'Vazirmatn', system-ui, sans-serif;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
             text-decoration: none;
-            transition: all 0.25s ease;
-            overflow: hidden;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: 1.5px solid var(--border);
+            background: var(--white);
+            color: var(--text-primary);
+            white-space: nowrap;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
-            white-space: nowrap;
-            z-index: 1;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .magic-btn::before {
+        .btn-outline::after {
             content: '';
             position: absolute;
-            top: var(--mouse-y, 50%);
-            left: var(--mouse-x, 50%);
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 70%);
-            transition: width 0.5s ease, height 0.5s ease;
-            z-index: -1;
+            inset: 0;
+            background: currentColor;
+            opacity: 0;
+            transition: opacity 0.15s;
             pointer-events: none;
         }
 
-        .magic-btn:hover::before {
-            width: 350px;
-            height: 350px;
-        }
-        .magic-btn:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35), 0 0 25px rgba(45, 212, 191, 0.08);
-            color: #fff;
-        }
-        .magic-btn:active {
-            transform: scale(0.96);
-            transition: transform 0.1s;
+        .btn-outline:active::after {
+            opacity: 0.04;
         }
 
-        /* accent variants */
-        .magic-btn.telegram {
-            border-color: rgba(0, 136, 204, 0.35);
-            background: rgba(0, 136, 204, 0.08);
+        .btn-outline:active {
+            transform: scale(0.97);
         }
-        .magic-btn.telegram:hover {
-            border-color: rgba(0, 160, 230, 0.7);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(0, 160, 230, 0.2);
+
+        .btn-outline.phone-btn {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
         }
-        .magic-btn.instagram {
-            border-color: rgba(225, 48, 108, 0.35);
-            background: rgba(225, 48, 108, 0.08);
+
+        .btn-outline.phone-btn:hover {
+            background: #dcfce7;
+            border-color: #86efac;
+            box-shadow: 0 2px 8px rgba(22, 101, 52, 0.08);
         }
-        .magic-btn.instagram:hover {
-            border-color: rgba(255, 60, 130, 0.7);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(255, 60, 130, 0.2);
+
+        .btn-outline.support-btn {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1e40af;
         }
-        .magic-btn.eitaa {
-            border-color: rgba(255, 140, 0, 0.35);
-            background: rgba(255, 140, 0, 0.08);
+
+        .btn-outline.support-btn:hover {
+            background: #dbeafe;
+            border-color: #93c5fd;
+            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.08);
         }
-        .magic-btn.eitaa:hover {
-            border-color: rgba(255, 160, 30, 0.7);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(255, 140, 0, 0.2);
+
+        .btn-outline.channel-btn {
+            border-color: #d1d5db;
+            background: #f9fafb;
+            color: #374151;
         }
-        .magic-btn.rubika {
-            border-color: rgba(150, 50, 220, 0.35);
-            background: rgba(150, 50, 220, 0.08);
+
+        .btn-outline.channel-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
-        .magic-btn.rubika:hover {
-            border-color: rgba(170, 70, 240, 0.7);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(150, 50, 220, 0.2);
+
+        .btn-outline.map-btn {
+            border-color: #e2e8f0;
+            background: #ffffff;
+            color: #1e293b;
+            font-weight: 600;
         }
-        .magic-btn.phone {
-            border-color: rgba(34, 197, 94, 0.35);
-            background: rgba(34, 197, 94, 0.08);
-        }
-        .magic-btn.phone:hover {
-            border-color: rgba(50, 220, 110, 0.7);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(34, 197, 94, 0.2);
-        }
-        .magic-btn.map-btn {
-            border-color: rgba(59, 130, 246, 0.35);
-            background: rgba(59, 130, 246, 0.08);
-        }
-        .magic-btn.map-btn:hover {
-            border-color: rgba(80, 150, 255, 0.7);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 35px rgba(59, 130, 246, 0.2);
+
+        .btn-outline.map-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .btn-icon {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             flex-shrink: 0;
         }
-        .btn-label {
-            font-weight: 500;
-        }
 
-        /* ============ ADDRESS ROW ============ */
-        .address-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            margin: 6px 0;
-            color: var(--text-secondary);
-            font-size: 0.88rem;
-            text-align: center;
-            padding: 0 4px;
-        }
-        .address-text {
-            flex: 1 1 200px;
-            min-width: 180px;
-            line-height: 1.8;
-        }
-
-        /* ============ HOURS TABLE ============ */
-        .hours-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius-md);
-            padding: 20px 18px;
-            margin-top: 8px;
-            text-align: center;
-        }
-        .hours-row {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-        .hours-block {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-sm);
-            padding: 10px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            min-width: 120px;
-        }
-        .hours-block span {
-            display: block;
+        .btn-text {
             font-weight: 600;
-            color: #fff;
-            font-size: 1rem;
-            margin-top: 2px;
+            font-size: 0.82rem;
         }
-        .online-note {
-            margin-top: 12px;
-            font-size: 0.8rem;
-            color: var(--primary);
-            font-weight: 500;
+
+        /* Single column variant */
+        .btn-full {
+            grid-column: span 2;
+        }
+
+        /* ============ ADDRESS CARD ============ */
+        .address-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+            padding: 18px 16px;
+        }
+
+        .address-text {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
         }
-        .online-note .dot-indicator {
-            width: 7px;
-            height: 7px;
-            background: var(--primary);
-            border-radius: 50%;
-            animation: pulseDot 2.5s ease-in-out infinite;
-            box-shadow: 0 0 10px var(--primary-glow);
+
+        .map-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        /* ============ INFO BADGES ============ */
-        .info-badges {
+        .map-buttons .btn-outline {
+            flex: 1;
+            min-width: 130px;
+        }
+
+        /* ============ TRUST SECTION ============ */
+        .trust-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             justify-content: center;
-            margin-top: 12px;
+            padding: 6px 0;
         }
-        .info-badge {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+        .trust-badge {
+            background: var(--off-white);
+            border: 1px solid var(--border-light);
             border-radius: 50px;
-            padding: 7px 15px;
+            padding: 8px 18px;
             font-size: 0.78rem;
+            font-weight: 500;
             color: var(--text-secondary);
-            transition: var(--transition);
-        }
-        .info-badge:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
         }
 
-        /* ============ FOOTER NOTE ============ */
-        .footer-note {
+        /* ============ FOOTER ============ */
+        .footer {
             text-align: center;
+            padding: 20px 10px;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            font-size: 0.75rem;
-            margin-top: 28px;
-            padding: 0 10px;
-            line-height: 1.9;
+            border-top: 1px solid var(--border-light);
+            margin-top: 8px;
         }
 
-        /* ============ RESPONSIVE ============ */
-        @media (max-width: 600px) {
-            .main-card {
-                padding: 22px 14px;
-                border-radius: var(--radius-md);
-            }
-            .btn-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-            .magic-btn {
-                padding: 11px 10px;
-                font-size: 0.78rem;
-                gap: 5px;
-            }
-            .brand-name {
-                font-size: 1.6rem;
-            }
-            .hours-row {
-                gap: 10px;
-            }
-            .hours-block {
-                min-width: 90px;
-                padding: 8px 10px;
-                font-size: 0.75rem;
-            }
-            .hours-block span {
-                font-size: 0.85rem;
-            }
+        .footer strong {
+            color: var(--text-primary);
+            font-weight: 700;
         }
 
+        /* ============ RESPONSIVE ADJUSTMENTS ============ */
         @media (max-width: 380px) {
             .btn-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 6px;
+                grid-template-columns: 1fr;
+                gap: 8px;
             }
-            .magic-btn {
-                padding: 10px 6px;
-                font-size: 0.7rem;
-                border-radius: 8px;
+            .btn-full {
+                grid-column: span 1;
+            }
+            .btn-outline {
+                padding: 12px 10px;
+                font-size: 0.78rem;
+            }
+            .brand-name {
+                font-size: 1.5rem;
+            }
+            .logo-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (min-width: 520px) {
+            .btn-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .container {
+                gap: 18px;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="particleCanvas"></canvas>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo-icon" aria-hidden="true">🧴</div>
+            <h1 class="brand-name">شما <span class="accent">شاپ</span></h1>
+            <p class="brand-subtitle">شوینده و محصولات بهداشتی با قیمت به‌روز</p>
+        </header>
 
-    <div class="main-wrapper">
-        <!-- HERO -->
-        <div class="hero-section">
-            <h1 class="brand-name">شما شاپ</h1>
-            <p class="brand-subtitle">شوینده بهداشتی شما</p>
+        <!-- REBUILD NOTICE -->
+        <section class="card rebuild-card" aria-labelledby="rebuild-heading">
+            <div class="rebuild-icon">🛠️</div>
+            <h2 id="rebuild-heading" class="rebuild-title">سایت شما شاپ در حال بازسازی است</h2>
+            <p class="rebuild-desc">
+                ما در حال آماده‌سازی نسخه جدید سایت هستیم.<br>
+                به زودی با امکانات بیشتر و تجربه خرید بهتر در خدمت شما خواهیم بود.
+            </p>
+        </section>
+
+        <!-- STORE STATUS -->
+        <div class="status-box" id="storeStatus" aria-live="polite">
+            <span class="status-indicator" id="statusDot"></span>
+            <span class="status-message" id="statusMessage">در حال بررسی...</span>
         </div>
 
-        <!-- STATUS -->
-        <div class="status-container">
-            <div class="status-badge" id="statusBadge">
-                <span class="status-dot" id="statusDot"></span>
-                <span class="status-text" id="statusText">در حال بررسی...</span>
-            </div>
-        </div>
-
-        <!-- MAIN CARD -->
-        <div class="main-card">
-            <div class="rebuild-message">
-                <h2>🚀 سایت در حال بازسازی اساسی است</h2>
-                <p>
-                    در حال ساخت یک تجربهٔ جدید و حرفه‌ای برای شما هستیم.<br>
-                    به زودی با ظاهری تازه، سرعت بیشتر و امکانات بهتر بازمی‌گردیم.<br>
-                    تا آن زمان، از مسیرهای زیر در خدمت شما هستیم.
-                </p>
-            </div>
-
-            <!-- PHONES -->
-            <div class="section-title">📞 تماس با ما</div>
+        <!-- CONTACT BUTTONS -->
+        <div>
+            <div class="section-label">📞 تماس با ما</div>
             <div class="btn-grid">
-                <a href="tel:09154819081" class="magic-btn phone">
+                <a href="tel:09154819081" class="btn-outline phone-btn" aria-label="تماس با موبایل">
                     <span class="btn-icon">📱</span>
-                    <span class="btn-label">موبایل</span>
+                    <span class="btn-text">موبایل</span>
                 </a>
-                <a href="tel:05138819081" class="magic-btn phone">
+                <a href="tel:05138819081" class="btn-outline phone-btn" aria-label="تماس با فروشگاه">
                     <span class="btn-icon">☎️</span>
-                    <span class="btn-label">تلفن مغازه</span>
+                    <span class="btn-text">تلفن فروشگاه</span>
                 </a>
-            </div>
-
-            <!-- SUPPORT -->
-            <div class="section-title">💬 پشتیبانی</div>
-            <div class="btn-grid">
-                <a href="https://t.me/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="magic-btn telegram">
-                    <span class="btn-icon">✈️</span>
-                    <span class="btn-label">تلگرام</span>
-                </a>
-                <a href="https://eitaa.com/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="magic-btn eitaa">
-                    <span class="btn-icon">📨</span>
-                    <span class="btn-label">ایتا</span>
-                </a>
-                <a href="https://rubika.ir/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="magic-btn rubika">
-                    <span class="btn-icon">💎</span>
-                    <span class="btn-label">روبیکا</span>
-                </a>
-            </div>
-
-            <!-- CHANNELS -->
-            <div class="section-title">📢 کانال‌ها (محصولات همراه با عکس و قیمت)</div>
-            <div class="btn-grid">
-                <a href="https://eitaa.com/shoma_shop" target="_blank" rel="noopener noreferrer" class="magic-btn eitaa">
-                    <span class="btn-icon">📨</span>
-                    <span class="btn-label">کانال ایتا</span>
-                </a>
-                <a href="https://rubika.ir/shoma_shop" target="_blank" rel="noopener noreferrer" class="magic-btn rubika">
-                    <span class="btn-icon">💎</span>
-                    <span class="btn-label">کانال روبیکا</span>
-                </a>
-                <a href="https://t.me/yourclean_bot" target="_blank" rel="noopener noreferrer" class="magic-btn telegram">
-                    <span class="btn-icon">🤖</span>
-                    <span class="btn-label">ربات تلگرام</span>
-                </a>
-            </div>
-
-            <!-- INSTAGRAM -->
-            <div class="section-title">📷 اینستاگرام</div>
-            <div class="btn-grid" style="grid-template-columns: 1fr;">
-                <a href="https://instagram.com/shoma_shop.ir" target="_blank" rel="noopener noreferrer" class="magic-btn instagram">
-                    <span class="btn-icon">📷</span>
-                    <span class="btn-label">@shoma_shop.ir</span>
-                </a>
-            </div>
-
-            <!-- ADDRESS & MAPS -->
-            <div class="section-title">📍 آدرس و مسیریابی</div>
-            <div class="address-row">
-                <span class="address-text">🏠 مشهد، بین هنرور ۲۰ و ۲۲</span>
-            </div>
-            <div class="btn-grid">
-                <a href="https://nshn.ir/35rb1MaUNJjDV8" target="_blank" rel="noopener noreferrer" class="magic-btn map-btn">
-                    <span class="btn-icon">🗺️</span>
-                    <span class="btn-label">مسیریابی با نشان</span>
-                </a>
-                <a href="https://maps.app.goo.gl/uNBXZpBYdt5nAJBKA" target="_blank" rel="noopener noreferrer" class="magic-btn map-btn">
-                    <span class="btn-icon">📍</span>
-                    <span class="btn-label">گوگل مپ</span>
-                </a>
-            </div>
-
-            <!-- WORKING HOURS -->
-            <div class="section-title">⏰ ساعت کاری</div>
-            <div class="hours-card" id="hoursCard">
-                <div class="hours-row">
-                    <div class="hours-block">
-                        ☀️ صبح
-                        <span>۹:۰۰ – ۱۴:۰۰</span>
-                    </div>
-                    <div class="hours-block">
-                        🌙 عصر
-                        <span>۱۷:۰۰ – ۲۲:۰۰</span>
-                    </div>
-                </div>
-                <div class="hours-row" style="margin-top:10px;">
-                    <div class="hours-block" style="border-color: rgba(239,68,68,0.25);">
-                        📅 روزهای کاری
-                        <span>شنبه تا پنجشنبه</span>
-                    </div>
-                    <div class="hours-block" style="border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.04);">
-                        ❌ تعطیل
-                        <span>جمعه‌ها</span>
-                    </div>
-                </div>
-                <div class="online-note">
-                    <span class="dot-indicator"></span> خرید اینترنتی همه روزه (حتی جمعه‌ها) امکان‌پذیر است
-                </div>
-            </div>
-
-            <!-- INFO BADGES -->
-            <div class="info-badges">
-                <span class="info-badge">🛒 امکان خرید حضوری و غیرحضوری</span>
-                <span class="info-badge">📦 ارسال درون‌شهری با اسنپ باکس</span>
-                <span class="info-badge">🚚 ارسال سراسری با پست</span>
-                <span class="info-badge">🎁 ارسال رایگان در محدوده</span>
-                <span class="info-badge">💰 هدف: زیر قیمت مصرف‌کننده</span>
             </div>
         </div>
 
-        <p class="footer-note">
-            💡 خرید اینترنتی محدود به ساعت حضور نیست و همه روزه امکان‌پذیر است.<br>
-            برای مشاهدهٔ محصولات با عکس و قیمت، به کانال‌های ما سر بزنید.<br>
-            سپاس از شکیبایی شما — به زودی با سایتی حرفه‌ای در خدمتتان هستیم 🙏
-        </p>
+        <!-- SUPPORT BUTTONS -->
+        <div>
+            <div class="section-label">💬 پشتیبانی</div>
+            <div class="btn-grid">
+                <a href="https://t.me/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="btn-outline support-btn" aria-label="پشتیبانی تلگرام">
+                    <span class="btn-icon">✈️</span>
+                    <span class="btn-text">تلگرام</span>
+                </a>
+                <a href="https://eitaa.com/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="btn-outline support-btn" aria-label="پشتیبانی ایتا">
+                    <span class="btn-icon">📨</span>
+                    <span class="btn-text">ایتا</span>
+                </a>
+                <a href="https://rubika.ir/shoma_shop_sup" target="_blank" rel="noopener noreferrer" class="btn-outline support-btn" aria-label="پشتیبانی روبیکا">
+                    <span class="btn-icon">💎</span>
+                    <span class="btn-text">روبیکا</span>
+                </a>
+                <a href="https://t.me/yourclean_bot" target="_blank" rel="noopener noreferrer" class="btn-outline support-btn" aria-label="ربات فروشگاه">
+                    <span class="btn-icon">🤖</span>
+                    <span class="btn-text">ربات فروشگاه</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- CHANNEL BUTTONS -->
+        <div>
+            <div class="section-label">📢 کانال محصولات</div>
+            <div class="btn-grid">
+                <a href="https://eitaa.com/shoma_shop" target="_blank" rel="noopener noreferrer" class="btn-outline channel-btn" aria-label="کانال ایتا">
+                    <span class="btn-icon">📨</span>
+                    <span class="btn-text">کانال ایتا</span>
+                </a>
+                <a href="https://rubika.ir/shoma_shop" target="_blank" rel="noopener noreferrer" class="btn-outline channel-btn" aria-label="کانال روبیکا">
+                    <span class="btn-icon">💎</span>
+                    <span class="btn-text">کانال روبیکا</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- INSTAGRAM -->
+        <div class="btn-grid" style="grid-template-columns:1fr;">
+            <a href="https://instagram.com/shoma_shop.ir" target="_blank" rel="noopener noreferrer" class="btn-outline channel-btn" aria-label="اینستاگرام" style="grid-column:span 1;">
+                <span class="btn-icon">📷</span>
+                <span class="btn-text">اینستاگرام @shoma_shop.ir</span>
+            </a>
+        </div>
+
+        <!-- ADDRESS & MAPS -->
+        <section class="card address-card" aria-labelledby="address-heading">
+            <div class="section-label" style="text-align:center;">📍 آدرس فروشگاه</div>
+            <p class="address-text" id="address-heading">
+                🏠 مشهد، بین هنرور ۲۰ و ۲۲
+            </p>
+            <div class="map-buttons">
+                <a href="https://nshn.ir/35rb1MaUNJjDV8" target="_blank" rel="noopener noreferrer" class="btn-outline map-btn" aria-label="مشاهده در نشان">
+                    <span class="btn-icon">🗺️</span>
+                    <span class="btn-text">مشاهده در نشان</span>
+                </a>
+                <a href="https://maps.app.goo.gl/uNBXZpBYdt5nAJBKA" target="_blank" rel="noopener noreferrer" class="btn-outline map-btn" aria-label="مشاهده در گوگل مپ">
+                    <span class="btn-icon">📍</span>
+                    <span class="btn-text">گوگل مپ</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- TRUST SECTION -->
+        <div class="trust-badges">
+            <span class="trust-badge">💚 ارسال محصولات با قیمت به‌روز</span>
+            <span class="trust-badge">🧴 ارائه محصولات شوینده و بهداشتی معتبر</span>
+            <span class="trust-badge">📦 ارسال سراسری با پست</span>
+            <span class="trust-badge">🚚 ارسال درون‌شهری با اسنپ باکس</span>
+            <span class="trust-badge">🎁 ارسال رایگان در محدوده</span>
+            <span class="trust-badge">🛒 خرید اینترنتی همه روزه</span>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>© <strong>شما شاپ</strong> — تمامی حقوق محفوظ است.</p>
+            <p style="margin-top:4px;font-size:0.75rem;color:var(--text-light);">سایت در حال بازسازی · نسخه جدید به زودی</p>
+        </footer>
     </div>
 
     <script>
         (function() {
-            // ============ PARTICLE CANVAS ============
-            const canvas = document.getElementById('particleCanvas');
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let mouse = { x: -500, y: -500 };
-            let animationId;
-            const PARTICLE_COUNT = 90;
-            const CONNECTION_DIST = 130;
-            const MOUSE_INFLUENCE = 180;
+            const statusBox = document.getElementById('storeStatus');
+            const statusDot = document.getElementById('statusDot');
+            const statusMessage = document.getElementById('statusMessage');
 
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resizeCanvas();
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-                initParticles();
-            });
-
-            class Particle {
-                constructor() {
-                    this.reset();
-                    // randomize initial position
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                }
-                reset() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.vx = (Math.random() - 0.5) * 0.6;
-                    this.vy = (Math.random() - 0.5) * 0.6;
-                    this.radius = Math.random() * 1.8 + 0.7;
-                    this.baseOpacity = Math.random() * 0.5 + 0.2;
-                    this.opacity = this.baseOpacity;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    // wrap around
-                    if (this.x < -20) this.x = canvas.width + 20;
-                    if (this.x > canvas.width + 20) this.x = -20;
-                    if (this.y < -20) this.y = canvas.height + 20;
-                    if (this.y > canvas.height + 20) this.y = -20;
-                    // mouse repulsion
-                    const dx = this.x - mouse.x;
-                    const dy = this.y - mouse.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < MOUSE_INFLUENCE && dist > 0) {
-                        const force = (MOUSE_INFLUENCE - dist) / MOUSE_INFLUENCE;
-                        const angle = Math.atan2(dy, dx);
-                        this.vx += Math.cos(angle) * force * 0.3;
-                        this.vy += Math.sin(angle) * force * 0.3;
-                        this.opacity = Math.min(1, this.baseOpacity + force * 0.6);
-                    } else {
-                        this.opacity += (this.baseOpacity - this.opacity) * 0.05;
-                    }
-                    // dampen
-                    const maxSpeed = 1.2;
-                    const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                    if (speed > maxSpeed) {
-                        this.vx = (this.vx / speed) * maxSpeed;
-                        this.vy = (this.vy / speed) * maxSpeed;
-                    }
-                }
-                draw(ctx) {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(180,210,240,${this.opacity.toFixed(3)})`;
-                    ctx.fill();
-                    // tiny glow
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius * 2.5, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(180,210,240,${(this.opacity * 0.2).toFixed(3)})`;
-                    ctx.fill();
-                }
-            }
-
-            function initParticles() {
-                particles = [];
-                for (let i = 0; i < PARTICLE_COUNT; i++) {
-                    particles.push(new Particle());
-                }
-            }
-            initParticles();
-
-            function drawConnections() {
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < CONNECTION_DIST) {
-                            const alpha = (1 - dist / CONNECTION_DIST) * 0.15;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = `rgba(160,200,240,${alpha.toFixed(3)})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            function animateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.update();
-                    p.draw(ctx);
-                });
-                drawConnections();
-                animationId = requestAnimationFrame(animateParticles);
-            }
-            animateParticles();
-
-            document.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-            document.addEventListener('touchmove', (e) => {
-                if (e.touches.length > 0) {
-                    mouse.x = e.touches[0].clientX;
-                    mouse.y = e.touches[0].clientY;
-                }
-            }, { passive: true });
-
-            // ============ MAGIC BUTTON MOUSE TRACKING ============
-            const magicButtons = document.querySelectorAll('.magic-btn');
-            magicButtons.forEach(btn => {
-                btn.addEventListener('mousemove', function(e) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    this.style.setProperty('--mouse-x', x + 'px');
-                    this.style.setProperty('--mouse-y', y + 'px');
-                });
-                btn.addEventListener('mouseleave', function() {
-                    this.style.setProperty('--mouse-x', '50%');
-                    this.style.setProperty('--mouse-y', '50%');
-                });
-            });
-
-            // ============ WORKING HOURS LOGIC (Tehran Time) ============
-            function getTehranDateTime() {
+            function getTehranTime() {
                 const now = new Date();
-                const tehranStr = now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' });
-                return new Date(tehranStr);
+                const tehranString = now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' });
+                return new Date(tehranString);
             }
 
-            function getPersianDayIndex(tehranDate) {
-                // JS getDay(): 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
-                const jsDay = tehranDate.getDay();
-                // Persian week: 0=Sat, 1=Sun, 2=Mon, 3=Tue, 4=Wed, 5=Thu, 6=Fri
+            function getPersianDayIndex(date) {
+                const jsDay = date.getDay();
                 if (jsDay === 6) return 0; // Saturday
                 if (jsDay === 5) return 6; // Friday
-                return jsDay + 1; // Sun->1, Mon->2, ..., Thu->5
+                return jsDay + 1;
             }
 
-            function getStatus() {
-                const tehran = getTehranDateTime();
+            function getStoreStatus() {
+                const tehran = getTehranTime();
                 const persianDay = getPersianDayIndex(tehran);
-                const hour = tehran.getHours();
-                const minute = tehran.getMinutes();
-                const totalMinutes = hour * 60 + minute;
+                const totalMinutes = tehran.getHours() * 60 + tehran.getMinutes();
 
-                // Friday (persianDay 6) = closed
+                const morningOpen = 9 * 60; // 9:00
+                const morningClose = 14 * 60; // 14:00
+                const eveningOpen = 17 * 60; // 17:00
+                const eveningClose = 22 * 60; // 22:00
+
+                // Friday (6) = closed
                 if (persianDay === 6) {
-                    return { status: 'closed', reason: 'friday', tehran, persianDay };
+                    return { status: 'closed', reason: 'friday' };
                 }
 
-                // Working days: Sat-Thu (persianDay 0-5)
-                const morningOpen = 9 * 60; // 9:00 = 540 min
-                const morningClose = 14 * 60; // 14:00 = 840 min
-                const eveningOpen = 17 * 60; // 17:00 = 1020 min
-                const eveningClose = 22 * 60; // 22:00 = 1320 min
-
-                // Check if within working hours
+                // Working days (0-5)
                 if (totalMinutes >= morningOpen && totalMinutes < morningClose) {
-                    return { status: 'open', tehran, persianDay, shift: 'morning' };
+                    return { status: 'open', shift: 'morning' };
                 }
                 if (totalMinutes >= eveningOpen && totalMinutes < eveningClose) {
-                    return { status: 'open', tehran, persianDay, shift: 'evening' };
+                    return { status: 'open', shift: 'evening' };
                 }
 
-                // Check "opening soon" (30 min before opening)
-                const soonThreshold = 30;
-                if (totalMinutes >= (morningOpen - soonThreshold) && totalMinutes < morningOpen) {
-                    return { status: 'soon', tehran, persianDay, opensAt: '۹:۰۰', minutesLeft: morningOpen -
-                            totalMinutes };
+                // Soon (30 min before opening)
+                if (totalMinutes >= (morningOpen - 30) && totalMinutes < morningOpen) {
+                    return { status: 'soon', opensAt: '۹:۰۰', minutesLeft: morningOpen - totalMinutes };
                 }
-                if (totalMinutes >= (eveningOpen - soonThreshold) && totalMinutes < eveningOpen) {
-                    return { status: 'soon', tehran, persianDay, opensAt: '۱۷:۰۰', minutesLeft: eveningOpen -
-                            totalMinutes };
+                if (totalMinutes >= (eveningOpen - 30) && totalMinutes < eveningOpen) {
+                    return { status: 'soon', opensAt: '۱۷:۰۰', minutesLeft: eveningOpen - totalMinutes };
                 }
 
-                return { status: 'closed', reason: 'out_of_hours', tehran, persianDay };
+                return { status: 'closed', reason: 'out_of_hours' };
             }
 
-            function updateStatusUI() {
-                const statusData = getStatus();
-                const badge = document.getElementById('statusBadge');
-                const dot = document.getElementById('statusDot');
-                const text = document.getElementById('statusText');
+            function updateUI() {
+                const state = getStoreStatus();
+                statusBox.classList.remove('open', 'closed', 'soon');
+                statusDot.classList.remove('open-dot', 'closed-dot', 'soon-dot');
 
-                // Remove all classes
-                badge.classList.remove('open', 'closed', 'soon');
-                dot.classList.remove('open-dot', 'closed-dot', 'soon-dot');
-
-                if (statusData.status === 'open') {
-                    badge.classList.add('open');
-                    dot.classList.add('open-dot');
-                    const shiftLabel = statusData.shift === 'morning' ? ' (شیفت صبح)' : ' (شیفت عصر)';
-                    text.textContent = '🟢 هم‌اکنون باز است' + shiftLabel;
-                } else if (statusData.status === 'soon') {
-                    badge.classList.add('soon');
-                    dot.classList.add('soon-dot');
-                    text.textContent =
-                        `🟡 به زودی باز می‌شود — ${statusData.minutesLeft} دقیقه دیگر (ساعت ${statusData.opensAt})`;
+                if (state.status === 'open') {
+                    statusBox.classList.add('open');
+                    statusDot.classList.add('open-dot');
+                    const shiftText = state.shift === 'morning' ? ' (شیفت صبح)' : ' (شیفت عصر)';
+                    statusMessage.textContent = '🟢 فروشگاه باز است' + shiftText;
+                } else if (state.status === 'soon') {
+                    statusBox.classList.add('soon');
+                    statusDot.classList.add('soon-dot');
+                    statusMessage.textContent =
+                        `🟡 به زودی باز می‌شود — ${state.minutesLeft} دقیقه دیگر (ساعت ${state.opensAt})`;
                 } else {
-                    badge.classList.add('closed');
-                    dot.classList.add('closed-dot');
-                    if (statusData.reason === 'friday') {
-                        text.textContent = '🔴 امروز جمعه — فروشگاه تعطیل | خرید اینترنتی فعال است';
+                    statusBox.classList.add('closed');
+                    statusDot.classList.add('closed-dot');
+                    if (state.reason === 'friday') {
+                        statusMessage.textContent = '🔴 فروشگاه بسته است (جمعه تعطیل) | خرید اینترنتی فعال';
                     } else {
-                        text.textContent = '🔴 هم‌اکنون بسته است | خرید اینترنتی همچنان فعال';
+                        statusMessage.textContent = '🔴 فروشگاه بسته است | خرید اینترنتی همیشه فعال';
                     }
                 }
             }
 
-            updateStatusUI();
-            // Update every 60 seconds
-            setInterval(updateStatusUI, 60000);
-
-            // ============ INITIAL MOUSE POSITIONS FOR BUTTONS ============
-            magicButtons.forEach(btn => {
-                btn.style.setProperty('--mouse-x', '50%');
-                btn.style.setProperty('--mouse-y', '50%');
-            });
-
-            console.log('%c✨ شما شاپ — سایت در حال بازسازی %c| %cتمام بخش‌های ارتباطی فعال هستند',
-                'font-size:1.2em;color:#2dd4bf;',
-                '',
-                'color:#f59e0b;');
-            console.log('%c📦 وضعیت فروشگاه: %c' + document.getElementById('statusText').textContent,
-                'color:#94a3b8;', 'color:#e2e8f0;');
+            updateUI();
+            setInterval(updateUI, 60000);
         })();
     </script>
 </body>
