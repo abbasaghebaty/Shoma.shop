@@ -1,185 +1,514 @@
 /* ==========================================================================
-   شما شاپ — script.js
-   Modules:
-   1. env detection      — hover-capable vs touch, reduced motion
-   2. tehran clock        — live digital clock, Asia/Tehran
-   3. store status engine — open / closing soon / opening soon / closed
-   4. ripple + reveal     — small interaction polish
+   شما شاپ — Design tokens
+   Palette: cool, clean, "freshly rinsed" — teal/mint against a soft
+   off-white, not the usual cream+terracotta or near-black+neon defaults.
+   Type: Vazirmatn (variable) carries both display and body; the live
+   clock leans on its bold weight + wide tracking for a "device readout"
+   feel instead of pulling in a second typeface.
    ========================================================================== */
 
-(function () {
-  "use strict";
+:root{
+  /* -- color: light -- */
+  --bg:            #F6F9F8;
+  --bg-elevated:   #FFFFFF;
+  --bg-sunken:     #EEF3F1;
+  --ink:           #0F211C;
+  --ink-soft:      #4C625C;
+  --ink-faint:     #7C8F89;
+  --border:        #E1E9E6;
+  --border-soft:   #EBF1EF;
 
-  /* ------------------------------------------------------------------ *
-   * 1. Environment detection
-   *    Desktop mouse users get hover micro-interactions; touch users
-   *    get a calmer, battery-friendlier page.
-   * ------------------------------------------------------------------ */
-  const root = document.documentElement;
-  const hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isTouch = window.matchMedia("(pointer: coarse)").matches;
+  --brand:         #0E7C66;
+  --brand-strong:  #0A5F4F;
+  --brand-soft:    #5FBFA6;
+  --brand-wash:    #E4F3EE;
 
-  if (hoverCapable) root.classList.add("hover-ok");
-  if (!reducedMotion) root.classList.add("motion-ok");
-  if (isTouch) root.classList.add("is-touch");
+  --open:          #1FA97A;
+  --open-wash:     #E4F6EE;
+  --warn:          #C98A20;
+  --warn-wash:     #FBF0DC;
+  --closed:        #D14B41;
+  --closed-wash:   #FBE9E7;
 
-  /* ------------------------------------------------------------------ *
-   * 2 + 3. Tehran clock & store status
-   * ------------------------------------------------------------------ */
-  const FA_DIGITS = { 0: "۰", 1: "۱", 2: "۲", 3: "۳", 4: "۴", 5: "۵", 6: "۶", 7: "۷", 8: "۸", 9: "۹" };
-  const toFa = (str) => String(str).replace(/[0-9]/g, (d) => FA_DIGITS[d]);
-  const pad = (n) => String(n).padStart(2, "0");
-  const faTime = (h, m) => `ساعت ${toFa(pad(h))}:${toFa(pad(m))}`;
+  /* -- type -- */
+  --font-main: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
 
-  const clockEl = document.getElementById("clockTime");
-  const statusTitleEl = document.getElementById("statusTitle");
-  const statusDetailEl = document.getElementById("statusDetail");
-  const heroCardEl = document.getElementById("statusCard");
+  /* -- shape / motion -- */
+  --radius-s:  10px;
+  --radius-m:  16px;
+  --radius-l:  24px;
+  --radius-xl: 30px;
+  --shadow-s:  0 1px 2px rgba(15,33,28,.05), 0 1px 1px rgba(15,33,28,.04);
+  --shadow-m:  0 8px 24px -8px rgba(15,33,28,.14);
+  --shadow-l:  0 20px 48px -16px rgba(15,33,28,.22);
+  --ease: cubic-bezier(.22,1,.36,1);
+  --dur-fast: .18s;
+  --dur-med: .38s;
 
-  const dots = [document.getElementById("headerDot"), document.getElementById("heroDot")].filter(Boolean);
-  const headerChipText = document.getElementById("headerChipText");
+  color-scheme: light;
+}
 
-  const clockFormatter = new Intl.DateTimeFormat("fa-IR", {
-    timeZone: "Asia/Tehran",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:            #0A1512;
+    --bg-elevated:   #10201B;
+    --bg-sunken:     #0D1A16;
+    --ink:           #EAF3F0;
+    --ink-soft:      #9FB6AF;
+    --ink-faint:     #6E8781;
+    --border:        #1D302A;
+    --border-soft:   #172723;
 
-  const partsFormatter = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Tehran",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
+    --brand:         #4FCBA8;
+    --brand-strong:  #6EDCBC;
+    --brand-soft:    #2E6E5C;
+    --brand-wash:    #12291F;
 
-  function tehranParts(date) {
-    const parts = partsFormatter.formatToParts(date);
-    const map = {};
-    parts.forEach((p) => (map[p.type] = p.value));
-    let h = parseInt(map.hour, 10);
-    if (h === 24) h = 0; // some engines report midnight as 24
-    return { h, m: parseInt(map.minute, 10), s: parseInt(map.second, 10) };
+    --open:          #3FCB93;
+    --open-wash:     #10291E;
+    --warn:          #E8B34E;
+    --warn-wash:     #2B2210;
+    --closed:        #EB6B60;
+    --closed-wash:   #2C1512;
+
+    --shadow-s: 0 1px 2px rgba(0,0,0,.35);
+    --shadow-m: 0 8px 24px -8px rgba(0,0,0,.5);
+    --shadow-l: 0 24px 56px -18px rgba(0,0,0,.6);
+
+    color-scheme: dark;
   }
+}
 
-  // Shifts, expressed in seconds-since-midnight.
-  const SHIFTS = [
-    { start: 9 * 3600, end: 14 * 3600, startLabel: [9, 0], endLabel: [14, 0] },
-    { start: 17 * 3600, end: 22 * 3600, startLabel: [17, 0], endLabel: [22, 0] },
-  ];
-  const SOON_WINDOW = 3600; // 1 hour
+/* ==========================================================================
+   Reset
+   ========================================================================== */
+*, *::before, *::after{ box-sizing: border-box; }
+html{ -webkit-text-size-adjust: 100%; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-main);
+  font-optical-sizing: auto;
+  line-height: 1.65;
+  overflow-x: hidden;
+  transition: background var(--dur-med) var(--ease), color var(--dur-med) var(--ease);
+}
+h1,h2,h3,p,figure{ margin: 0; }
+img{ max-width: 100%; display: block; }
+a{ color: inherit; text-decoration: none; }
+ul{ margin: 0; padding: 0; list-style: none; }
+button{ font: inherit; }
 
-  function setDotState(state) {
-    dots.forEach((dot) => {
-      dot.classList.remove("is-open", "is-warn", "is-closed");
-      dot.classList.add(state);
-    });
-    heroCardEl.classList.remove("is-open", "is-warn", "is-closed");
-    heroCardEl.classList.add(state);
+:focus-visible{
+  outline: 2.5px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: var(--radius-s);
+}
+
+.skip-link{
+  position: absolute;
+  right: 1rem; top: -3rem;
+  background: var(--brand);
+  color: #fff;
+  padding: .7rem 1.2rem;
+  border-radius: var(--radius-s);
+  z-index: 999;
+  transition: top var(--dur-fast) var(--ease);
+}
+.skip-link:focus{ top: 1rem; }
+
+.container{
+  width: 100%;
+  max-width: 880px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px){ .container{ padding-inline: 2rem; } }
+@media (min-width: 1100px){ .container{ max-width: 1000px; } }
+
+.section{ padding-block: 2.75rem; }
+.section-title{
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.5rem);
+  font-weight: 800;
+  margin-bottom: 1.1rem;
+  letter-spacing: -.01em;
+}
+.section-title.small{ margin-bottom: .5rem; font-size: 1.15rem; }
+
+.eyebrow{
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--ink-faint);
+  margin: 0 0 .3rem;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.site-header{
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  border-bottom: 1px solid var(--border-soft);
+}
+.header-inner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: .85rem;
+}
+.brand{ display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+.brand-name{ font-weight: 800; font-size: 1.05rem; letter-spacing: -.01em; }
+.brand-tagline{
+  font-size: .72rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-chip{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: .45rem .85rem;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-s);
+  white-space: nowrap;
+}
+@media (max-width: 420px){
+  .status-chip .chip-label{ display:none; }
+}
+
+.status-dot{
+  width: .55rem; height: .55rem;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  flex-shrink: 0;
+}
+.status-dot.xl{ width: 1rem; height: 1rem; }
+.status-dot::after{ content:""; }
+
+/* status color states — applied via JS on dots + card */
+.status-dot.is-open{ background: var(--open); }
+.status-dot.is-warn{ background: var(--warn); }
+.status-dot.is-closed{ background: var(--closed); }
+
+.motion-ok .status-dot.is-open,
+.motion-ok .status-dot.is-warn{
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-dot{
+  0%, 100%{ box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 45%, transparent); }
+  50%{ box-shadow: 0 0 0 6px transparent; }
+}
+
+/* ==========================================================================
+   Hero / live status card — the page's signature element
+   ========================================================================== */
+.hero{ padding-block: 2rem 1.5rem; }
+
+.hero-card{
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 2rem clamp(1.25rem, 4vw, 2.5rem);
+  box-shadow: var(--shadow-l);
+  transition: box-shadow var(--dur-med) var(--ease);
+}
+
+.hero-card-glow{
+  position: absolute;
+  inset: -40% -20% auto auto;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--brand) 22%, transparent) 0%, transparent 70%);
+  pointer-events: none;
+  transition: background var(--dur-med) var(--ease);
+}
+.hero-card.is-warn .hero-card-glow{
+  background: radial-gradient(circle, color-mix(in srgb, var(--warn) 26%, transparent) 0%, transparent 70%);
+}
+.hero-card.is-closed .hero-card-glow{
+  background: radial-gradient(circle, color-mix(in srgb, var(--closed) 20%, transparent) 0%, transparent 70%);
+}
+
+.motion-ok .hero-card-glow{ animation: drift 9s ease-in-out infinite; }
+@keyframes drift{
+  0%,100%{ transform: translate(0,0) scale(1); }
+  50%{ transform: translate(-6%, 4%) scale(1.08); }
+}
+
+.clock-wrap{ position: relative; text-align: center; margin-bottom: 1.4rem; }
+.clock{
+  font-size: clamp(2.1rem, 6vw + .5rem, 3.4rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .04em;
+  color: var(--ink);
+}
+
+.status-wrap{
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: .85rem;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+}
+.status-wrap h1{
+  font-size: clamp(1.15rem, .95rem + 1vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+.status-detail{
+  color: var(--ink-soft);
+  font-size: .92rem;
+  margin-top: .3rem;
+}
+
+.hours-row{
+  position: relative;
+  display: flex;
+  gap: .7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+}
+.hours-pill{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: .45rem 1rem;
+  font-size: .82rem;
+}
+.hours-pill span{ color: var(--ink-faint); }
+.hours-pill b{ font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ==========================================================================
+   Announcement
+   ========================================================================== */
+.announcement{
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  background: var(--brand-wash);
+  border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--border));
+  color: var(--brand-strong);
+  border-radius: var(--radius-l);
+  padding: 1.1rem 1.4rem;
+  margin-top: 1.4rem;
+  font-weight: 600;
+}
+.announcement-icon{
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.6rem; height: 2.6rem;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  color: var(--brand);
+}
+.announcement p{ color: var(--ink); font-size: .95rem; }
+.announcement b{ color: var(--brand-strong); }
+
+/* ==========================================================================
+   Shipping method cards
+   ========================================================================== */
+.grid-3{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 720px){ .grid-3{ grid-template-columns: 1fr; } }
+
+.method-card{
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-s);
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.hover-ok .method-card:hover{
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-m);
+  border-color: color-mix(in srgb, var(--brand) 30%, var(--border));
+}
+.method-icon{
+  display: grid;
+  place-items: center;
+  width: 2.9rem; height: 2.9rem;
+  border-radius: var(--radius-m);
+  background: var(--brand-wash);
+  color: var(--brand);
+  margin-bottom: .9rem;
+}
+.method-card h3{ font-size: 1rem; font-weight: 700; margin-bottom: .3rem; }
+.method-card p{ font-size: .85rem; color: var(--ink-soft); }
+
+/* ==========================================================================
+   Order guide
+   ========================================================================== */
+.order-guide{
+  display: flex;
+  gap: 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-s);
+}
+.order-icon{
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.6rem; height: 2.6rem;
+  border-radius: 50%;
+  background: var(--brand-wash);
+  color: var(--brand);
+}
+.order-guide p{ font-size: .9rem; color: var(--ink-soft); margin-top: .35rem; }
+
+/* ==========================================================================
+   Contact grid + route buttons
+   ========================================================================== */
+.contact-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .85rem;
+}
+@media (max-width: 560px){ .contact-grid{ grid-template-columns: 1fr; } }
+
+.grid-2{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .85rem;
+}
+@media (max-width: 560px){ .grid-2{ grid-template-columns: 1fr; } }
+
+.contact-btn, .route-btn{
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: .95rem 1.1rem;
+  box-shadow: var(--shadow-s);
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.hover-ok .contact-btn:hover, .hover-ok .route-btn:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-m);
+  border-color: color-mix(in srgb, var(--brand) 35%, var(--border));
+  background: color-mix(in srgb, var(--brand-wash) 55%, var(--bg-elevated));
+}
+.contact-btn:active, .route-btn:active{ transform: translateY(0) scale(.98); }
+
+.contact-icon{
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem; height: 2.5rem;
+  border-radius: var(--radius-s);
+  background: var(--brand-wash);
+  color: var(--brand);
+}
+.contact-text{ display: flex; flex-direction: column; gap: .1rem; min-width: 0; }
+.contact-text b{ font-size: .9rem; font-weight: 700; }
+.contact-text small{ font-size: .74rem; color: var(--ink-faint); }
+
+.contact-btn.is-soon{ opacity: .55; cursor: default; }
+.contact-btn.is-soon:hover{ transform: none; box-shadow: var(--shadow-s); }
+
+/* subtle ripple, added via JS */
+.ripple{
+  position: absolute;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--brand) 35%, transparent);
+  transform: scale(0);
+  animation: ripple .55s var(--ease);
+  pointer-events: none;
+}
+@keyframes ripple{ to{ transform: scale(1); opacity: 0; } }
+
+.support-note{
+  margin-top: 1.1rem;
+  font-size: .82rem;
+  color: var(--ink-faint);
+  line-height: 1.8;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer{
+  border-top: 1px solid var(--border-soft);
+  margin-top: 1.5rem;
+  padding-block: 1.8rem;
+}
+.footer-inner{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.footer-brand{ font-weight: 800; font-size: .95rem; }
+.footer-tagline{ font-size: .78rem; color: var(--ink-faint); }
+.footer-copy{ font-size: .78rem; color: var(--ink-faint); }
+
+/* ==========================================================================
+   Scroll reveal
+   ========================================================================== */
+.reveal{
+  opacity: 1;
+  transform: none;
+}
+.motion-ok .reveal{
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+.motion-ok .reveal.is-visible{
+  opacity: 1;
+  transform: none;
+}
+
+/* ==========================================================================
+   Reduced motion & no-hover safety nets
+   ========================================================================== */
+.is-touch .hero-card-glow{ animation: none; }
+.is-touch .status-dot.is-open,
+.is-touch .status-dot.is-warn{ animation: none; }
+.is-touch .reveal{ transition-duration: .35s; }
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
   }
-
-  function renderStatus(nowSec) {
-    // Currently inside a shift?
-    const activeShift = SHIFTS.find((s) => nowSec >= s.start && nowSec < s.end);
-
-    if (activeShift) {
-      const remaining = activeShift.end - nowSec;
-      const endTime = faTime(...activeShift.endLabel);
-
-      if (remaining <= SOON_WINDOW) {
-        setDotState("is-warn");
-        statusTitleEl.textContent = "به‌زودی فروشگاه بسته می‌شود";
-        statusDetailEl.textContent = `تا ${endTime} در خدمت شما هستیم.`;
-        headerChipText.textContent = "به‌زودی بسته می‌شود";
-      } else {
-        setDotState("is-open");
-        statusTitleEl.textContent = "اکنون فروشگاه باز است";
-        statusDetailEl.textContent = `تا ${endTime} در خدمت شما هستیم.`;
-        headerChipText.textContent = "اکنون باز است";
-      }
-      return;
-    }
-
-    // Not in a shift — find the next one (today or tomorrow morning).
-    let next = SHIFTS.find((s) => s.start > nowSec);
-    let untilNext;
-    let nextLabel;
-
-    if (next) {
-      untilNext = next.start - nowSec;
-      nextLabel = faTime(...next.startLabel);
-    } else {
-      // Past the last shift — next is tomorrow's first shift.
-      const first = SHIFTS[0];
-      untilNext = 24 * 3600 - nowSec + first.start;
-      nextLabel = `فردا، ${faTime(...first.startLabel)}`;
-    }
-
-    if (untilNext <= SOON_WINDOW) {
-      setDotState("is-warn");
-      statusTitleEl.textContent = "به‌زودی فروشگاه باز می‌شود";
-      statusDetailEl.textContent = `از ${nextLabel} در خدمت شما هستیم.`;
-      headerChipText.textContent = "به‌زودی باز می‌شود";
-    } else {
-      setDotState("is-closed");
-      statusTitleEl.textContent = "اکنون فروشگاه بسته است";
-      statusDetailEl.textContent = `شروع شیفت بعدی: ${nextLabel}`;
-      headerChipText.textContent = "اکنون بسته است";
-    }
-  }
-
-  function tick() {
-    const now = new Date();
-    clockEl.textContent = clockFormatter.format(now);
-
-    const { h, m, s } = tehranParts(now);
-    renderStatus(h * 3600 + m * 60 + s);
-  }
-
-  tick();
-  setInterval(tick, 1000);
-
-  /* ------------------------------------------------------------------ *
-   * 4. Ripple — a quiet feedback pulse on button press, only where
-   *    hover/pointer precision suggests it will read as intentional.
-   * ------------------------------------------------------------------ */
-  function attachRipple(el) {
-    el.addEventListener("pointerdown", (e) => {
-      if (reducedMotion) return;
-      const rect = el.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height) * 1.4;
-      const span = document.createElement("span");
-      span.className = "ripple";
-      span.style.width = span.style.height = `${size}px`;
-      span.style.left = `${e.clientX - rect.left - size / 2}px`;
-      span.style.top = `${e.clientY - rect.top - size / 2}px`;
-      el.appendChild(span);
-      span.addEventListener("animationend", () => span.remove());
-    });
-  }
-  document.querySelectorAll(".contact-btn, .route-btn, .method-card").forEach(attachRipple);
-
-  /* ------------------------------------------------------------------ *
-   * Scroll reveal
-   * ------------------------------------------------------------------ */
-  const revealEls = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window && revealEls.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-    revealEls.forEach((el) => io.observe(el));
-  } else {
-    revealEls.forEach((el) => el.classList.add("is-visible"));
-  }
-})();
+}
