@@ -1,185 +1,141 @@
-/* ==========================================================================
-   شما شاپ — script.js
-   Modules:
-   1. env detection      — hover-capable vs touch, reduced motion
-   2. tehran clock        — live digital clock, Asia/Tehran
-   3. store status engine — open / closing soon / opening soon / closed
-   4. ripple + reveal     — small interaction polish
-   ========================================================================== */
-
-(function () {
+(() => {
   "use strict";
 
-  /* ------------------------------------------------------------------ *
-   * 1. Environment detection
-   *    Desktop mouse users get hover micro-interactions; touch users
-   *    get a calmer, battery-friendlier page.
-   * ------------------------------------------------------------------ */
-  const root = document.documentElement;
-  const hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isTouch = window.matchMedia("(pointer: coarse)").matches;
+  /* ==========================================================
+     تنظیمات شیفت‌های کاری فروشگاه (به وقت تهران)
+     ========================================================== */
+  const SHIFTS = [
+    { start: [9, 0],  end: [14, 0] }, // شیفت صبح
+    { start: [17, 0], end: [22, 0] }, // شیفت عصر
+  ];
+  const TIME_ZONE = "Asia/Tehran";
 
-  if (hoverCapable) root.classList.add("hover-ok");
-  if (!reducedMotion) root.classList.add("motion-ok");
-  if (isTouch) root.classList.add("is-touch");
-
-  /* ------------------------------------------------------------------ *
-   * 2 + 3. Tehran clock & store status
-   * ------------------------------------------------------------------ */
-  const FA_DIGITS = { 0: "۰", 1: "۱", 2: "۲", 3: "۳", 4: "۴", 5: "۵", 6: "۶", 7: "۷", 8: "۸", 9: "۹" };
-  const toFa = (str) => String(str).replace(/[0-9]/g, (d) => FA_DIGITS[d]);
-  const pad = (n) => String(n).padStart(2, "0");
-  const faTime = (h, m) => `ساعت ${toFa(pad(h))}:${toFa(pad(m))}`;
-
-  const clockEl = document.getElementById("clockTime");
+  const clockTimeEl   = document.getElementById("clockTime");
   const statusTitleEl = document.getElementById("statusTitle");
-  const statusDetailEl = document.getElementById("statusDetail");
-  const heroCardEl = document.getElementById("statusCard");
-
-  const dots = [document.getElementById("headerDot"), document.getElementById("heroDot")].filter(Boolean);
+  const statusDetailEl= document.getElementById("statusDetail");
+  const heroDotEl      = document.getElementById("heroDot");
+  const headerDotEl    = document.getElementById("headerDot");
   const headerChipText = document.getElementById("headerChipText");
 
-  const clockFormatter = new Intl.DateTimeFormat("fa-IR", {
-    timeZone: "Asia/Tehran",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-
-  const partsFormatter = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Tehran",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-
-  function tehranParts(date) {
-    const parts = partsFormatter.formatToParts(date);
-    const map = {};
-    parts.forEach((p) => (map[p.type] = p.value));
-    let h = parseInt(map.hour, 10);
-    if (h === 24) h = 0; // some engines report midnight as 24
-    return { h, m: parseInt(map.minute, 10), s: parseInt(map.second, 10) };
-  }
-
-  // Shifts, expressed in seconds-since-midnight.
-  const SHIFTS = [
-    { start: 9 * 3600, end: 14 * 3600, startLabel: [9, 0], endLabel: [14, 0] },
-    { start: 17 * 3600, end: 22 * 3600, startLabel: [17, 0], endLabel: [22, 0] },
-  ];
-  const SOON_WINDOW = 3600; // 1 hour
-
-  function setDotState(state) {
-    dots.forEach((dot) => {
-      dot.classList.remove("is-open", "is-warn", "is-closed");
-      dot.classList.add(state);
+  /** ساعت، دقیقه و ثانیهٔ فعلی را به‌وقت تهران برمی‌گرداند */
+  function getTehranParts(date) {
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: TIME_ZONE,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
     });
-    heroCardEl.classList.remove("is-open", "is-warn", "is-closed");
-    heroCardEl.classList.add(state);
+    const parts = fmt.formatToParts(date).reduce((acc, p) => {
+      acc[p.type] = p.value;
+      return acc;
+    }, {});
+    return {
+      hour: parseInt(parts.hour, 10),
+      minute: parseInt(parts.minute, 10),
+      second: parseInt(parts.second, 10),
+    };
   }
 
-  function renderStatus(nowSec) {
-    // Currently inside a shift?
-    const activeShift = SHIFTS.find((s) => nowSec >= s.start && nowSec < s.end);
+  function pad(n) {
+    return String(n).padStart(2, "0");
+  }
 
-    if (activeShift) {
-      const remaining = activeShift.end - nowSec;
-      const endTime = faTime(...activeShift.endLabel);
+  function minutesSinceMidnight({ hour, minute }) {
+    return hour * 60 + minute;
+  }
 
-      if (remaining <= SOON_WINDOW) {
-        setDotState("is-warn");
-        statusTitleEl.textContent = "به‌زودی فروشگاه بسته می‌شود";
-        statusDetailEl.textContent = `تا ${endTime} در خدمت شما هستیم.`;
-        headerChipText.textContent = "به‌زودی بسته می‌شود";
-      } else {
-        setDotState("is-open");
-        statusTitleEl.textContent = "اکنون فروشگاه باز است";
-        statusDetailEl.textContent = `تا ${endTime} در خدمت شما هستیم.`;
-        headerChipText.textContent = "اکنون باز است";
+  /** بررسی می‌کند فروشگاه اکنون باز است یا نه، و اطلاعات شیفت جاری/بعدی را برمی‌گرداند */
+  function computeStatus(nowParts) {
+    const nowMin = minutesSinceMidnight(nowParts);
+
+    for (const shift of SHIFTS) {
+      const startMin = shift.start[0] * 60 + shift.start[1];
+      const endMin = shift.end[0] * 60 + shift.end[1];
+      if (nowMin >= startMin && nowMin < endMin) {
+        return {
+          open: true,
+          endLabel: `${pad(shift.end[0])}:${pad(shift.end[1])}`,
+        };
       }
-      return;
     }
 
-    // Not in a shift — find the next one (today or tomorrow morning).
-    let next = SHIFTS.find((s) => s.start > nowSec);
-    let untilNext;
-    let nextLabel;
+    // فروشگاه بسته است؛ پیدا کردن نزدیک‌ترین شیفت بعدی برای امروز
+    const upcoming = SHIFTS
+      .map((s) => ({ ...s, startMin: s.start[0] * 60 + s.start[1] }))
+      .filter((s) => s.startMin > nowMin)
+      .sort((a, b) => a.startMin - b.startMin)[0];
 
-    if (next) {
-      untilNext = next.start - nowSec;
-      nextLabel = faTime(...next.startLabel);
-    } else {
-      // Past the last shift — next is tomorrow's first shift.
-      const first = SHIFTS[0];
-      untilNext = 24 * 3600 - nowSec + first.start;
-      nextLabel = `فردا، ${faTime(...first.startLabel)}`;
+    if (upcoming) {
+      return {
+        open: false,
+        nextLabel: `${pad(upcoming.start[0])}:${pad(upcoming.start[1])}`,
+      };
     }
 
-    if (untilNext <= SOON_WINDOW) {
-      setDotState("is-warn");
-      statusTitleEl.textContent = "به‌زودی فروشگاه باز می‌شود";
-      statusDetailEl.textContent = `از ${nextLabel} در خدمت شما هستیم.`;
-      headerChipText.textContent = "به‌زودی باز می‌شود";
-    } else {
-      setDotState("is-closed");
-      statusTitleEl.textContent = "اکنون فروشگاه بسته است";
-      statusDetailEl.textContent = `شروع شیفت بعدی: ${nextLabel}`;
-      headerChipText.textContent = "اکنون بسته است";
-    }
+    // بعد از آخرین شیفت امروز؛ شیفت بعدی، شیفت صبح فرداست
+    const first = SHIFTS[0];
+    return {
+      open: false,
+      nextLabel: `${pad(first.start[0])}:${pad(first.start[1])} فردا`,
+    };
   }
 
-  function tick() {
+  function render() {
     const now = new Date();
-    clockEl.textContent = clockFormatter.format(now);
+    const parts = getTehranParts(now);
 
-    const { h, m, s } = tehranParts(now);
-    renderStatus(h * 3600 + m * 60 + s);
+    if (clockTimeEl) {
+      clockTimeEl.textContent = `${pad(parts.hour)}:${pad(parts.minute)}:${pad(parts.second)}`;
+    }
+
+    const status = computeStatus(parts);
+
+    if (status.open) {
+      if (statusTitleEl) statusTitleEl.textContent = "فروشگاه هم‌اکنون باز است";
+      if (statusDetailEl) statusDetailEl.textContent = `تا ساعت ${status.endLabel} پاسخگوی شما هستیم.`;
+      if (headerChipText) headerChipText.textContent = "باز است";
+      [heroDotEl, headerDotEl].forEach((el) => {
+        if (!el) return;
+        el.classList.add("is-open");
+        el.classList.remove("is-closed");
+      });
+    } else {
+      if (statusTitleEl) statusTitleEl.textContent = "فروشگاه در حال حاضر بسته است";
+      if (statusDetailEl) statusDetailEl.textContent = `شروع شیفت بعدی: ساعت ${status.nextLabel}`;
+      if (headerChipText) headerChipText.textContent = "بسته است";
+      [heroDotEl, headerDotEl].forEach((el) => {
+        if (!el) return;
+        el.classList.add("is-closed");
+        el.classList.remove("is-open");
+      });
+    }
   }
 
-  tick();
-  setInterval(tick, 1000);
+  render();
+  setInterval(render, 1000);
 
-  /* ------------------------------------------------------------------ *
-   * 4. Ripple — a quiet feedback pulse on button press, only where
-   *    hover/pointer precision suggests it will read as intentional.
-   * ------------------------------------------------------------------ */
-  function attachRipple(el) {
-    el.addEventListener("pointerdown", (e) => {
-      if (reducedMotion) return;
-      const rect = el.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height) * 1.4;
-      const span = document.createElement("span");
-      span.className = "ripple";
-      span.style.width = span.style.height = `${size}px`;
-      span.style.left = `${e.clientX - rect.left - size / 2}px`;
-      span.style.top = `${e.clientY - rect.top - size / 2}px`;
-      el.appendChild(span);
-      span.addEventListener("animationend", () => span.remove());
-    });
-  }
-  document.querySelectorAll(".contact-btn, .route-btn, .method-card").forEach(attachRipple);
-
-  /* ------------------------------------------------------------------ *
-   * Scroll reveal
-   * ------------------------------------------------------------------ */
+  /* ==========================================================
+     انیمیشن ظاهر شدن عناصر هنگام اسکرول
+     ========================================================== */
   const revealEls = document.querySelectorAll(".reveal");
+
   if ("IntersectionObserver" in window && revealEls.length) {
-    const io = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
-            io.unobserve(entry.target);
+            observer.unobserve(entry.target);
           }
         });
       },
       { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
-    revealEls.forEach((el) => io.observe(el));
+
+    revealEls.forEach((el) => observer.observe(el));
   } else {
+    // Fallback برای مرورگرهای بدون پشتیبانی از IntersectionObserver
     revealEls.forEach((el) => el.classList.add("is-visible"));
   }
 })();
